@@ -1,0 +1,15 @@
+plugins {
+    id "java"
+}
+
+group = "xyz.papermodloader"
+version = "gradle"
+sourceCompatibility = targetCompatibility = "1.8"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile gradleApi()
+}
