@@ -22,6 +22,11 @@ if (System.getenv().BUILD_NUMBER) {
     version = version + "." + "${System.getenv().BUILD_NUMBER}"
 }
 
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
 repositories {
     mavenCentral()
     maven {
@@ -34,14 +39,20 @@ build.dependsOn(shadowJar)
 
 dependencies {
     compile gradleApi()
-    compile "com.google.code.gson:gson:2.7"
-    compile "commons-io:commons-io:2.5"
-    compile "cuchaz:enigma-lib:0.11b"
-    compile "org.ow2.asm:asm-debug-all:5.1"
+    shade "com.google.code.gson:gson:2.7"
+    shade "commons-io:commons-io:2.5"
+    shade "cuchaz:enigma-lib:0.11b"
+    shade "org.ow2.asm:asm-debug-all:5.1"
+}
+
+sourceSets {
+    main.compileClasspath += configurations.shade;
+    main.runtimeClasspath += configurations.shade;
 }
 
 shadowJar {
     classifier = null
+    configurations = [project.configurations.shade]
 }
 
 String getVersion() {
@@ -63,7 +74,7 @@ publishing {
         mavenJava(MavenPublication) {
             groupId "xyz.papermodloader"
             artifactId "tree"
-            from components.java
+            from components.shadow
         }
     }
     repositories {
