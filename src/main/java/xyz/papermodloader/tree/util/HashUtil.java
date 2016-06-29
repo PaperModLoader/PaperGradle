@@ -1,4 +1,4 @@
-package xyz.papermodloader.papergradle.util;
+package xyz.papermodloader.tree.util;
 
 import org.gradle.internal.impldep.com.google.common.hash.HashCode;
 import org.gradle.internal.impldep.com.google.common.hash.Hashing;

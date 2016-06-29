@@ -1,4 +1,4 @@
-package xyz.papermodloader.papergradle.util.delayed;
+package xyz.papermodloader.tree.util.delayed;
 
 import java.util.function.Supplier;
 

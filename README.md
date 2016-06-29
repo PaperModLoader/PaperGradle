@@ -1,2 +1,2 @@
-# PaperGradle
-The Gradle plugin for Paper
+# Tree
+Gradle plugin for Paper

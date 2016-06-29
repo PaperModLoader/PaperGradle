@@ -1,9 +1,10 @@
-package xyz.papermodloader.papergradle.task;
+package xyz.papermodloader.tree.task;
 
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
-import xyz.papermodloader.papergradle.Constants;
+import xyz.papermodloader.tree.Constants;
+import xyz.papermodloader.tree.util.HashUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,13 +15,14 @@ public class DownloadTask extends DefaultTask {
     private String cache;
     private File file;
     private URL url;
+    private String sha1;
     private Consumer<DownloadTask> init;
 
     @TaskAction
     public void doTask() throws IOException {
         this.init.accept(this);
         File cache = new File(Constants.CACHE_DIRECTORY, this.cache);
-        if (!cache.exists()) {
+        if (!cache.exists() || !HashUtil.equalHash(cache, this.sha1)) {
             if (this.file != null && this.file.exists()) {
                 FileUtils.copyFile(this.file, cache);
                 this.getLogger().info(":found fallback for " + this.cache);
@@ -45,5 +47,9 @@ public class DownloadTask extends DefaultTask {
 
     public void setURL(URL url) {
         this.url = url;
+    }
+
+    public void setSHA1(String sha1) {
+        this.sha1 = sha1;
     }
 }

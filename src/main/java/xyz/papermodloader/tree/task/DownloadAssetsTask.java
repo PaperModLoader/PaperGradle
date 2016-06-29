@@ -1,13 +1,13 @@
-package xyz.papermodloader.papergradle.task;
+package xyz.papermodloader.tree.task;
 
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.internal.logging.progress.ProgressLogger;
 import org.gradle.internal.logging.progress.ProgressLoggerFactory;
-import xyz.papermodloader.papergradle.Constants;
-import xyz.papermodloader.papergradle.util.LauncherManifest;
-import xyz.papermodloader.papergradle.util.HashUtil;
+import xyz.papermodloader.tree.Constants;
+import xyz.papermodloader.tree.util.LauncherManifest;
+import xyz.papermodloader.tree.util.HashUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,7 @@ public class DownloadAssetsTask extends DefaultTask {
     public void doTask() throws IOException, InterruptedException {
         LauncherManifest.ManifestVersion.Version version = Constants.VERSION.get();
         LauncherManifest.ManifestVersion.Version.AssetIndex.Assets assets = version.assetIndex.getAssets();
-        ProgressLogger progressLogger = this.getServices().get(ProgressLoggerFactory.class).newOperation(this.getClass().getName());
+        ProgressLogger progressLogger = this.getServices().get(ProgressLoggerFactory.class).newOperation(this.getClass());
         progressLogger.start(":downloadAssets", ":assets");
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
         int total = assets.objects.size();
@@ -39,6 +39,7 @@ public class DownloadAssetsTask extends DefaultTask {
                         if (installationAsset.exists() && HashUtil.equalHash(installationAsset, sha1)) {
                             FileUtils.copyFile(installationAsset, file);
                         } else {
+                            this.getLogger().info(":downloading asset " + entry.getKey());
                             FileUtils.copyURLToFile(new URL("http://resources.download.minecraft.net/" + sha1.substring(0, 2) + "/" + sha1), file);
                         }
                     }

@@ -1,8 +1,9 @@
-package xyz.papermodloader.papergradle.util;
+package xyz.papermodloader.tree.util;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
-import xyz.papermodloader.papergradle.Constants;
+import xyz.papermodloader.tree.Constants;
 
 import java.io.*;
 import java.net.URL;
@@ -99,55 +100,85 @@ public class LauncherManifest {
 
             public class Library {
                 public String name;
-                public Downloads downloads;
+                public JsonObject natives;
+                public JsonObject downloads;
+
                 public Rule[] rules;
-                public Natives natives;
 
-                public class Downloads {
-                    public Artifact artifact;
+                public String getURL() {
+                    String path;
+                    String[] parts = this.name.split(":", 3);
+                    path = parts[0].replace(".", "/") + "/" + parts[1] + "/" + parts[2] + "/" + parts[1] + "-" + parts[2] + getClassifier() + ".jar";
+                    return "https://libraries.minecraft.net/" + path;
+                }
 
-                    public class Artifact {
-                        public int size;
-                        public String sha1;
-                        public String path;
-                        public String url;
+                public String getFile() {
+                    String[] parts = this.name.split(":", 3);
+                    return parts[0].replace(".", File.separator) + File.separator + parts[1] + File.separator + parts[2] + File.separator + parts[1] + "-" + parts[2] + getClassifier() + ".jar";
+                }
+
+                public String getSHA1() {
+                    if (this.downloads == null) {
+                        return "";
+                    } else if (this.downloads.getAsJsonObject("artifact") == null) {
+                        return "";
+                    } else if (this.downloads.getAsJsonObject("artifact").get("sha1") == null) {
+                        return "";
+                    } else {
+                        return this.downloads.getAsJsonObject("artifact").get("sha1").getAsString();
                     }
                 }
 
-                public class Rule {
-                    public String action;
-                    public OS os;
-
-                    public class OS {
-                        public String name;
+                public String getClassifier() {
+                    if (natives == null) {
+                        return "";
+                    } else {
+                        return "-" + natives.get(OperatingSystem.getOS().replace("${arch}", OperatingSystem.getArch())).getAsString().replace("\"", "");
                     }
                 }
 
-                public class Extract {
-                    public String[] exclude;
-                }
+                public boolean isAllowed() {
+                    if (this.rules == null || this.rules.length <= 0) {
+                        return true;
+                    }
 
-                public class Natives {
-                    public String linux;
-                    public String osx;
-                    public String windows;
+                    boolean success = false;
+                    for (Rule rule : this.rules) {
+                        if (rule.os != null && rule.os.name != null) {
+                            if (rule.os.name.equalsIgnoreCase(OperatingSystem.getOS())) {
+                                return rule.action.equalsIgnoreCase("allow");
+                            }
+                        } else {
+                            success = rule.action.equalsIgnoreCase("allow");
+                        }
+                    }
+                    return success;
                 }
             }
 
-            public class Logging {
-                public Client client;
+            private class Rule {
+                public String action;
+                public OS os;
 
-                public class Client {
-                    public File file;
-                    public String argument;
-                    public String type;
+                private class OS {
+                    String name;
+                }
+            }
+        }
 
-                    public class File {
-                        public String id;
-                        public String sha1;
-                        public int size;
-                        public String url;
-                    }
+        public class Logging {
+            public Client client;
+
+            public class Client {
+                public File file;
+                public String argument;
+                public String type;
+
+                public class File {
+                    public String id;
+                    public String sha1;
+                    public int size;
+                    public String url;
                 }
             }
         }
