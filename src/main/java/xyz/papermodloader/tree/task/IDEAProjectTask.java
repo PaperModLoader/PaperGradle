@@ -31,7 +31,7 @@ public class IDEAProjectTask extends DefaultTask {
             content.appendChild(createSourceFolder(document, "file://$MODULE_DIR$/src/main/java", false));
             content.appendChild(createSourceFolder(document, "file://$MODULE_DIR$/src/main/resources", true));
 
-            component.appendChild(this.createLibrary(document, "jar://" + Constants.MINECRAFT_LIBRARY_JAR.get().getAbsolutePath() + "!/"));
+            component.appendChild(this.createLibrary(document, "jar://" + Constants.MINECRAFT_LIBRARY_JAR_CACHE.get().getAbsolutePath() + "!/"));
 
             for (LauncherManifest.ManifestVersion.Version.Library library : Constants.VERSION.get().libraries) {
                 if (library.isAllowed()) {

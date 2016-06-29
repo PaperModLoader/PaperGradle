@@ -18,14 +18,14 @@ public class DecompileTask extends DefaultTask implements Deobfuscator.ProgressL
     @TaskAction
     public void doTask() {
         try {
-            if (Constants.MINECRAFT_DECOMPILED.exists()) {
+            if (Constants.MINECRAFT_DECOMPILED_CACHE.exists()) {
                 return;
             }
             Deobfuscator deobfuscator = new Deobfuscator(new JarFile(Constants.DEOBF_MERGED_JAR_CACHE.get()));
             Field settings = Deobfuscator.class.getDeclaredField("m_settings");
             settings.setAccessible(true);
             ((DecompilerSettings) settings.get(deobfuscator)).setShowDebugLineNumbers(false);
-            deobfuscator.writeSources(Constants.MINECRAFT_DECOMPILED, this);
+            deobfuscator.writeSources(Constants.MINECRAFT_DECOMPILED_CACHE, this);
             this.progressLogger.completed();
         } catch (Exception e) {
             e.printStackTrace();

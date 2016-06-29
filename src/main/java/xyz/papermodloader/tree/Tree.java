@@ -34,6 +34,15 @@ public class Tree implements Plugin<Project> {
             }
         })).dependsOn(Constants.TASK_DOWNLOAD_ASSETS, Constants.TASK_DOWNLOAD_LIBRARIES);
         this.addTask(Constants.TASK_DOWNLOAD_LIBRARIES, DownloadLibrariesTask.class);
+        this.addTask(Constants.TASK_DOWNLOAD_MAPPINGS, DownloadTask.class, task -> task.setInit(download -> {
+            try {
+                task.setCache(Constants.CLIENT_JAR_CACHE.get().getName());
+                task.setFile(Constants.MAPPINGS_FILE_CACHE.get());
+                task.setURL(new URL("http://ci.ilexiconn.net/job/Cardboard/" + this.getExtension().mappings + "/artifact/" + this.getExtension().minecraft + ".mappings"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }));
         this.addTask(Constants.TASK_DOWNLOAD_SERVER, DownloadTask.class, task -> task.setInit(download -> {
             try {
                 task.setCache(Constants.SERVER_JAR_CACHE.get().getName());

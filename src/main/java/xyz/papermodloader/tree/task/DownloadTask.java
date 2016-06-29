@@ -22,7 +22,7 @@ public class DownloadTask extends DefaultTask {
     public void doTask() throws IOException {
         this.init.accept(this);
         File cache = new File(Constants.CACHE_DIRECTORY, this.cache);
-        if (!cache.exists() || !HashUtil.equalHash(cache, this.sha1)) {
+        if (!cache.exists() || (this.sha1 != null && !HashUtil.equalHash(cache, this.sha1))) {
             if (this.file != null && this.file.exists()) {
                 FileUtils.copyFile(this.file, cache);
                 this.getLogger().info(":found fallback for " + this.cache);

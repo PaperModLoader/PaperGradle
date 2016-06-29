@@ -9,7 +9,6 @@ import org.gradle.internal.logging.progress.ProgressLogger;
 import org.gradle.internal.logging.progress.ProgressLoggerFactory;
 import xyz.papermodloader.tree.Constants;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.jar.JarFile;
@@ -21,7 +20,7 @@ public class DeobfuscateTask extends DefaultTask implements Deobfuscator.Progres
     @TaskAction
     public void doTask() throws InterruptedException, IOException, MappingParseException {
         Deobfuscator deobfuscator = new Deobfuscator(new JarFile(Constants.MERGED_JAR_CACHE.get()));
-        deobfuscator.setMappings(new MappingsReader().read(new FileReader(new File(Constants.CACHE_DIRECTORY, "1.10.2.mappings"))));
+        deobfuscator.setMappings(new MappingsReader().read(new FileReader(Constants.MAPPINGS_FILE_CACHE.get())));
         deobfuscator.writeJar(Constants.DEOBF_MERGED_JAR_CACHE.get(), this);
         this.progressLogger.completed();
     }

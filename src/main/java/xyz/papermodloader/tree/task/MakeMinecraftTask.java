@@ -18,7 +18,7 @@ public class MakeMinecraftTask extends DefaultTask {
     public void doTask() throws IOException {
         ZipFile merged = new ZipFile(Constants.DEOBF_MERGED_JAR_CACHE.get());
         ZipFile client = new ZipFile(Constants.CLIENT_JAR_CACHE.get());
-        File libraryJar = Constants.MINECRAFT_LIBRARY_JAR.get();
+        File libraryJar = Constants.MINECRAFT_LIBRARY_JAR_CACHE.get();
         if (!libraryJar.exists()) {
             libraryJar.createNewFile();
         }
