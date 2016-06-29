@@ -1,15 +1,56 @@
+buildscript {
+    repositories {
+        jcenter();
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
 plugins {
     id "java"
+    id "com.github.johnrengelman.shadow" version "1.2.3"
 }
 
 group = "xyz.papermodloader"
-version = "gradle"
+version = getVersion()
+archivesBaseName = "papergradle"
 sourceCompatibility = targetCompatibility = "1.8"
 
 repositories {
     mavenCentral()
+    maven {
+        name = "cuchaz"
+        url = "http://maven.cuchazinteractive.com"
+    }
 }
+
+build.dependsOn(shadowJar)
 
 dependencies {
     compile gradleApi()
+    compile "com.google.guava:guava:19.0"
+    compile "com.google.code.gson:gson:2.7"
+    compile "commons-io:commons-io:2.5"
+    compile "org.javassist:javassist:3.20.0-GA"
+    compile "org.bitbucket.mstrobel:procyon-core:0.5.32"
+    compile "cuchaz:enigma-lib:0.11b"
+}
+
+shadowJar {
+    classifier = null
+}
+
+String getVersion() {
+    String version = "0.0.0"
+    String prefix = "public static final String VERSION = \"";
+    File file = file("src/main/java/xyz/papermodloader/papergradle/PaperGradle.java")
+    file.eachLine { String s ->
+        s = s.trim();
+        if (s.startsWith(prefix)) {
+            s = s.substring(prefix.length(), s.length() - 2);
+            version = s;
+        }
+    }
+    return version;
 }
