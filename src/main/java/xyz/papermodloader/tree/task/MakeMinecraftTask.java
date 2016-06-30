@@ -1,5 +1,6 @@
 package xyz.papermodloader.tree.task;
 
+import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.apache.commons.io.IOUtils;
@@ -32,6 +33,9 @@ public class MakeMinecraftTask extends DefaultTask {
                 out.closeEntry();
             }
         }
+        out.putNextEntry(new ZipEntry("1.10.2.mappings"));
+        FileUtils.copyFile(Constants.MAPPINGS_FILE_CACHE.get(), out);
+        out.closeEntry();
         entries = merged.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
