@@ -1,4 +1,4 @@
-package xyz.papermodloader.paper.launcher;
+package xyz.papermodloader.paper.launcher.side;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

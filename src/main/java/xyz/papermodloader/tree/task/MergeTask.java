@@ -10,8 +10,8 @@ import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
-import xyz.papermodloader.paper.launcher.Side;
-import xyz.papermodloader.paper.launcher.SideDependent;
+import xyz.papermodloader.paper.launcher.side.Side;
+import xyz.papermodloader.paper.launcher.side.SideDependent;
 import xyz.papermodloader.tree.Constants;
 
 import java.io.FileOutputStream;
