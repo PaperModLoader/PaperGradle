@@ -2,7 +2,7 @@ package xyz.papermodloader.tree.task;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
-import org.gradle.internal.impldep.org.apache.commons.io.IOUtils;
+import org.apache.commons.io.IOUtils;
 import xyz.papermodloader.tree.Constants;
 
 import java.io.File;
