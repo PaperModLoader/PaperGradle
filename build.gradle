@@ -43,6 +43,7 @@ dependencies {
     shade "commons-io:commons-io:2.5"
     shade "cuchaz:enigma-lib:0.11b"
     shade "org.ow2.asm:asm-debug-all:5.1"
+    shade "org.apache.commons:commons-lang3:3.4"
 }
 
 sourceSets {

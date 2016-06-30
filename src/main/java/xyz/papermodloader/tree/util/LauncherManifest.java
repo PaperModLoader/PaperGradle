@@ -34,7 +34,7 @@ public class LauncherManifest {
         public String release;
     }
 
-    public class ManifestVersion {
+    public static class ManifestVersion {
         public String id;
         public String type;
         public String time;
@@ -48,7 +48,7 @@ public class LauncherManifest {
             return version;
         }
 
-        public class Version {
+        public static class Version {
             public AssetIndex assetIndex;
             public String assets;
             public Downloads downloads;
@@ -62,7 +62,7 @@ public class LauncherManifest {
             public String time;
             public String type;
 
-            public class AssetIndex {
+            public static class AssetIndex {
                 public String id;
                 public String sha1;
                 public String size;
@@ -77,7 +77,7 @@ public class LauncherManifest {
                     return new Gson().fromJson(new FileReader(file), Assets.class);
                 }
 
-                public class Assets {
+                public static class Assets {
                     public Map<String, AssetEntry> objects;
 
                     public class AssetEntry {
@@ -87,7 +87,7 @@ public class LauncherManifest {
                 }
             }
 
-            public class Downloads {
+            public static class Downloads {
                 public Download client;
                 public Download server;
 
@@ -98,7 +98,7 @@ public class LauncherManifest {
                 }
             }
 
-            public class Library {
+            public static class Library {
                 public String name;
                 public JsonObject natives;
                 public JsonObject downloads;
@@ -156,7 +156,7 @@ public class LauncherManifest {
                 }
             }
 
-            private class Rule {
+            public static class Rule {
                 public String action;
                 public OS os;
 
@@ -166,15 +166,15 @@ public class LauncherManifest {
             }
         }
 
-        public class Logging {
+        public static class Logging {
             public Client client;
 
-            public class Client {
+            public static class Client {
                 public File file;
                 public String argument;
                 public String type;
 
-                public class File {
+                public static class File {
                     public String id;
                     public String sha1;
                     public int size;

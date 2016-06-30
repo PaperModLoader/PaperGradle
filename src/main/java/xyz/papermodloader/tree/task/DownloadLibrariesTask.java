@@ -1,6 +1,7 @@
 package xyz.papermodloader.tree.task;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.internal.logging.progress.ProgressLogger;
@@ -20,6 +21,9 @@ public class DownloadLibrariesTask extends DefaultTask {
     @TaskAction
     public void doTask() throws InterruptedException {
         LauncherManifest.ManifestVersion.Version.Library[] libraries = Constants.VERSION.get().libraries;
+        LauncherManifest.ManifestVersion.Version.Library launchWrapper = new LauncherManifest.ManifestVersion.Version.Library();
+        launchWrapper.name = "net.minecraft:launchwrapper:1.11";
+        ArrayUtils.add(libraries, launchWrapper);
         ProgressLogger progressLogger = this.getServices().get(ProgressLoggerFactory.class).newOperation(this.getClass());
         progressLogger.start(":downloadLibraries", ":libraries");
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
