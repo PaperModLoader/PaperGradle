@@ -54,7 +54,7 @@ public class DownloadLibrariesTask extends DefaultTask {
                                 }
                                 while (entries.hasMoreElements()) {
                                     ZipEntry entry = entries.nextElement();
-                                    if (!entry.getName().contains("META_INF")) {
+                                    if (!entry.getName().contains("META-INF")) {
                                         FileUtils.copyToFile(zip.getInputStream(entry), new File(nativesDirectory, entry.getName()));
                                     }
                                 }
