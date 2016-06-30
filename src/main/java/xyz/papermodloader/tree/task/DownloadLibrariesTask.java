@@ -9,7 +9,6 @@ import org.gradle.internal.logging.progress.ProgressLoggerFactory;
 import xyz.papermodloader.tree.Constants;
 import xyz.papermodloader.tree.util.HashUtil;
 import xyz.papermodloader.tree.util.LauncherManifest;
-import xyz.papermodloader.tree.util.OperatingSystem;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,8 +60,6 @@ public class DownloadLibrariesTask extends DefaultTask {
                                 zip.close();
                             }
                         }
-                    } else {
-                        this.getLogger().lifecycle(":library " + library.name + " not allowed on os " + OperatingSystem.getOS());
                     }
                     current[0]++;
                     progressLogger.progress(current[0] + "/" + total + " (" + (int) ((current[0] / (float) total) * 100) + "%)");
