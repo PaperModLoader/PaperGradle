@@ -38,6 +38,12 @@ public class MakeMinecraftTask extends DefaultTask {
         out.putNextEntry(new ZipEntry(Tree.INSTANCE.getExtension().minecraft + ".mappings"));
         FileUtils.copyFile(Constants.MAPPINGS_FILE_CACHE.get(), out);
         out.closeEntry();
+        out.putNextEntry(new ZipEntry(Tree.INSTANCE.getExtension().minecraft + "-obf.index"));
+        FileUtils.copyFile(Constants.OBF_INDEX_CACHE.get(), out);
+        out.closeEntry();
+        out.putNextEntry(new ZipEntry(Tree.INSTANCE.getExtension().minecraft + "-deobf.index"));
+        FileUtils.copyFile(Constants.DEOBF_INDEX_CACHE.get(), out);
+        out.closeEntry();
         entries = merged.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
