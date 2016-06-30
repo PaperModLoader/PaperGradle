@@ -81,16 +81,16 @@ publishing {
     repositories {
         maven {
             credentials {
-                if (System.getenv().Passowrd) {
-                    username System.getenv().Name
-                    password System.getenv().Passowrd
+                if (System.getenv().PASSWORD) {
+                    username System.getenv().USERNAME
+                    password System.getenv().PASSWORD
                 } else {
                     username ""
                     password ""
                 }
             }
-            if (System.getenv().Passowrd) {
-                url System.getenv().Repo
+            if (System.getenv().PASSWORD) {
+                url "sftp://connect.ilexiconn.net:22/home/ilexiconn/maven/"
             } else {
                 url "file:///var/www/maven/"
             }
