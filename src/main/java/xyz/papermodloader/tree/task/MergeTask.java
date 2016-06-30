@@ -85,30 +85,26 @@ public class MergeTask extends DefaultTask {
                 }
                 field.visibleAnnotations.add(sideAnnotation);
             });
-            for (FieldNode field : mergeClassNode.fields) {
-                if (this.getEquivalent(field, processed) == null) {
-                    if (field.visibleAnnotations == null) {
-                        field.visibleAnnotations = new ArrayList<>();
-                    }
-                    field.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
+            mergeClassNode.fields.stream().filter(field -> this.getEquivalent(field, processed) == null).forEach(field -> {
+                if (field.visibleAnnotations == null) {
+                    field.visibleAnnotations = new ArrayList<>();
                 }
+                field.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
                 processed.fields.add(field);
-            }
+            });
             processed.methods.stream().filter(method -> this.getEquivalent(method, mergeClassNode) == null).forEach(method -> {
                 if (method.visibleAnnotations == null) {
                     method.visibleAnnotations = new ArrayList<>();
                 }
                 method.visibleAnnotations.add(sideAnnotation);
             });
-            for (MethodNode method : mergeClassNode.methods) {
-                if (this.getEquivalent(method, processed) == null) {
-                    if (method.visibleAnnotations == null) {
-                        method.visibleAnnotations = new ArrayList<>();
-                    }
-                    method.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
+            mergeClassNode.methods.stream().filter(method -> this.getEquivalent(method, processed) == null).forEach(method -> {
+                if (method.visibleAnnotations == null) {
+                    method.visibleAnnotations = new ArrayList<>();
                 }
+                method.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
                 processed.methods.add(method);
-            }
+            });
         } else {
             if (processed.visibleAnnotations == null) {
                 processed.visibleAnnotations = new ArrayList<>();
@@ -120,9 +116,9 @@ public class MergeTask extends DefaultTask {
         return writer.toByteArray();
     }
 
-    private MethodNode getEquivalent(MethodNode field, ClassNode otherClass) {
+    private MethodNode getEquivalent(MethodNode method, ClassNode otherClass) {
         for (MethodNode otherMethod : otherClass.methods) {
-            if (otherMethod.name.equals(field.name)) {
+            if (otherMethod.name.equals(method.name) && otherMethod.desc.equals(method.desc)) {
                 return otherMethod;
             }
         }
@@ -131,7 +127,7 @@ public class MergeTask extends DefaultTask {
 
     private FieldNode getEquivalent(FieldNode field, ClassNode otherClass) {
         for (FieldNode otherField : otherClass.fields) {
-            if (otherField.name.equals(field.name)) {
+            if (otherField.name.equals(field.name) && otherField.desc.equals(field.desc)) {
                 return otherField;
             }
         }
