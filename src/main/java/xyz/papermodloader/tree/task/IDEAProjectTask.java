@@ -62,8 +62,8 @@ public class IDEAProjectTask extends DefaultTask {
 
             String workingDirectory = Tree.INSTANCE.getExtension().workingDirectory;
             String ideaWorkingDirectory = "file://$PROJECT_DIR$/" + workingDirectory;
-            runManager.appendChild(this.createRunConfiguration(document, runManager, "xyz.papermodloader.launcher.PaperClient", projectName, "Minecraft Client", ideaWorkingDirectory));
-            runManager.appendChild(this.createRunConfiguration(document, runManager, "xyz.papermodloader.launcher.PaperServer", projectName, "Minecraft Server", ideaWorkingDirectory));
+            runManager.appendChild(this.createRunConfiguration(document, runManager, "xyz.papermodloader.paper.launcher.PaperClient", projectName, "Minecraft Client", ideaWorkingDirectory));
+            runManager.appendChild(this.createRunConfiguration(document, runManager, "xyz.papermodloader.paper.launcher.PaperServer", projectName, "Minecraft Server", ideaWorkingDirectory));
 
             File workingDirectoryFile = new File(this.getProject().getProjectDir(), workingDirectory);
 

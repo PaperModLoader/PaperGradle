@@ -1,4 +1,4 @@
-package xyz.papermodloader.launcher;
+package xyz.papermodloader.paper.launcher;
 
 public enum Side {
     CLIENT,
