@@ -54,8 +54,15 @@ public class Tree implements Plugin<Project> {
         this.addTask(Constants.TASK_DOWNLOAD_ASSETS, DownloadAssetsTask.class);
         this.addTask(Constants.TASK_MERGE, MergeTask.class).dependsOn(Constants.TASK_DOWNLOAD_CLIENT, Constants.TASK_DOWNLOAD_SERVER);
         this.addTask(Constants.TASK_DEOBFUSCATE, DeobfuscateTask.class).dependsOn(Constants.TASK_MERGE);
-        //this.addTask(Constants.TASK_DECOMPILE, DecompileTask.class).dependsOn(Constants.TASK_MERGE);
-        this.addTask(Constants.TASK_MAKE_MINECRAFT, MakeMinecraftTask.class).dependsOn(Constants.TASK_DEOBFUSCATE);
+        this.addTask(Constants.TASK_GENERATE_OBF_INDEX, GenerateIndexTask.class, task -> task.setInit(generate -> {
+            task.setInput(Constants.MERGED_JAR_CACHE.get());
+            task.setOutput(Constants.OBF_INDEX_CACHE.get());
+        })).dependsOn(Constants.TASK_DEOBFUSCATE);
+        this.addTask(Constants.TASK_GENERATE_DEOBF_INDEX, GenerateIndexTask.class, task -> task.setInit(generate -> {
+            task.setInput(Constants.DEOBF_MERGED_JAR_CACHE.get());
+            task.setOutput(Constants.DEOBF_INDEX_CACHE.get());
+        })).dependsOn(Constants.TASK_DEOBFUSCATE);
+        this.addTask(Constants.TASK_MAKE_MINECRAFT, MakeMinecraftTask.class).dependsOn(Constants.TASK_GENERATE_OBF_INDEX, Constants.TASK_GENERATE_DEOBF_INDEX);
         this.addTask(Constants.TASK_SETUP, DefaultTask.class).dependsOn(Constants.TASK_MAKE_MINECRAFT);
         this.addTask(Constants.TASK_IDEA, IDEAProjectTask.class).dependsOn("idea");
     }

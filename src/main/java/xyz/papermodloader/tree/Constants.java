@@ -15,7 +15,8 @@ public class Constants {
     public static final String TASK_DOWNLOAD_SERVER = "downloadServer";
     public static final String TASK_MERGE = "merge";
     public static final String TASK_DEOBFUSCATE = "deobfuscate";
-    public static final String TASK_DECOMPILE = "decompile";
+    public static final String TASK_GENERATE_OBF_INDEX = "generateObfIndex";
+    public static final String TASK_GENERATE_DEOBF_INDEX = "generateDeobfIndex";
     public static final String TASK_MAKE_MINECRAFT = "makeMinecraft";
     public static final String TASK_SETUP = "setupPaper";
     public static final String TASK_IDEA = "setupIDEA";
@@ -29,7 +30,8 @@ public class Constants {
     public static final Delayed<File> SERVER_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, Tree.INSTANCE.getExtension().minecraft + "-server.jar"));
     public static final Delayed<File> MERGED_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, Tree.INSTANCE.getExtension().minecraft + "-merged.jar"));
     public static final Delayed<File> DEOBF_MERGED_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, Tree.INSTANCE.getExtension().minecraft + "-merged-deobf.jar"));
-    public static final File MINECRAFT_DECOMPILED_CACHE = new File(CACHE_DIRECTORY, "unpackaged");
+    public static final Delayed<File> OBF_INDEX_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + "indexes" + File.separator + Tree.INSTANCE.getExtension().minecraft + "-" + Tree.INSTANCE.getExtension().mappings + "-obf.index"));
+    public static final Delayed<File> DEOBF_INDEX_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + "indexes" + File.separator + Tree.INSTANCE.getExtension().minecraft + "-" + Tree.INSTANCE.getExtension().mappings + "-deobf.index"));
     public static final Delayed<File> MINECRAFT_LIBRARY_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "minecraft-" + Tree.INSTANCE.getExtension().minecraft + ".jar"));
     public static final Delayed<File> MAPPINGS_FILE_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + Tree.INSTANCE.getExtension().minecraft + "-" + Tree.INSTANCE.getExtension().mappings + ".mappings"));
 

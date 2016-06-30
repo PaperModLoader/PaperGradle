@@ -3,7 +3,6 @@ package xyz.papermodloader.tree.task;
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
-import xyz.papermodloader.tree.Constants;
 import xyz.papermodloader.tree.util.HashUtil;
 
 import java.io.File;
@@ -12,11 +11,11 @@ import java.net.URL;
 import java.util.function.Consumer;
 
 public class DownloadTask extends DefaultTask {
+    private Consumer<DownloadTask> init;
     private File cache;
     private File file;
     private URL url;
     private String sha1;
-    private Consumer<DownloadTask> init;
 
     @TaskAction
     public void doTask() throws IOException {
@@ -32,8 +31,8 @@ public class DownloadTask extends DefaultTask {
         }
     }
 
-    public void setInit(Consumer<DownloadTask> function) {
-        this.init = function;
+    public void setInit(Consumer<DownloadTask> init) {
+        this.init = init;
     }
 
     public void setCache(File cache) {
