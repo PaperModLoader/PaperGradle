@@ -9,13 +9,17 @@ import org.gradle.internal.logging.progress.ProgressLoggerFactory;
 import xyz.papermodloader.tree.Constants;
 import xyz.papermodloader.tree.util.HashUtil;
 import xyz.papermodloader.tree.util.LauncherManifest;
+import xyz.papermodloader.tree.util.OperatingSystem;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class DownloadLibrariesTask extends DefaultTask {
     @TaskAction
@@ -41,7 +45,24 @@ public class DownloadLibrariesTask extends DefaultTask {
                         } else {
                             this.getLogger().info(":downloading library " + library.name);
                             FileUtils.copyURLToFile(new URL(library.getURL()), target);
+                            if (library.name.contains("-platform")) {
+                                ZipFile zip = new ZipFile(target);
+                                Enumeration<? extends ZipEntry> entries = zip.entries();
+                                File nativesDirectory = Constants.NATIVES_DIRECTORY;
+                                if (!nativesDirectory.exists()) {
+                                    nativesDirectory.mkdir();
+                                }
+                                while (entries.hasMoreElements()) {
+                                    ZipEntry entry = entries.nextElement();
+                                    if (!entry.getName().contains("META_INF")) {
+                                        FileUtils.copyToFile(zip.getInputStream(entry), new File(nativesDirectory, entry.getName()));
+                                    }
+                                }
+                                zip.close();
+                            }
                         }
+                    } else {
+                        this.getLogger().lifecycle(":library " + library.name + " not allowed on os " + OperatingSystem.getOS());
                     }
                     current[0]++;
                     progressLogger.progress(current[0] + "/" + total + " (" + (int) ((current[0] / (float) total) * 100) + "%)");

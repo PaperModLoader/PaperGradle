@@ -33,6 +33,8 @@ public class Constants {
     public static final Delayed<File> MINECRAFT_LIBRARY_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "minecraft-" + Tree.INSTANCE.getExtension().minecraft + ".jar"));
     public static final Delayed<File> MAPPINGS_FILE_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, Tree.INSTANCE.getExtension().minecraft + "-" + Tree.INSTANCE.getExtension().mappings + ".mappings"));
 
+    public static final File NATIVES_DIRECTORY = new File(Constants.CACHE_DIRECTORY, "natives");
+
     public static final Delayed<File> MINECRAFT_DIRECTORY = new DelayedCache<>(() -> {
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("win")) {

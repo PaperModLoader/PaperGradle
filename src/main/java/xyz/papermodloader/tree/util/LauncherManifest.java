@@ -138,21 +138,23 @@ public class LauncherManifest {
                 }
 
                 public boolean isAllowed() {
-                    if (this.rules == null || this.rules.length <= 0) {
-                        return true;
-                    }
-
-                    boolean success = false;
-                    for (Rule rule : this.rules) {
-                        if (rule.os != null && rule.os.name != null) {
-                            if (rule.os.name.equalsIgnoreCase(OperatingSystem.getOS())) {
-                                return rule.action.equalsIgnoreCase("allow");
+                    if (this.rules != null && this.rules.length > 0) {
+                        for (Rule rule : this.rules) {
+                            boolean allow = rule.action.equalsIgnoreCase("allow");
+                            Rule.OS os = rule.os;
+                            if (os != null && os.name != null) {
+                                if (os.name.equalsIgnoreCase(OperatingSystem.getOS())) {
+                                    return allow;
+                                } else {
+                                    return !allow;
+                                }
+                            } else if (!allow) {
+                                return false;
                             }
-                        } else {
-                            success = rule.action.equalsIgnoreCase("allow");
                         }
                     }
-                    return success;
+
+                    return true;
                 }
             }
 
