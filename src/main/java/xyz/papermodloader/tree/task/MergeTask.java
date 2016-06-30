@@ -79,41 +79,32 @@ public class MergeTask extends DefaultTask {
         AnnotationNode sideAnnotation = this.createSideAnnotation(side);
         if (merge != null) {
             ClassNode mergeClassNode = this.getClassNode(mergeFile, merge);
-            for (FieldNode field : processed.fields) {
-                if (this.getEquivalent(field, mergeClassNode) == null) {
-                    if (field.visibleAnnotations == null) {
-                        field.visibleAnnotations = new ArrayList<>();
-                    }
-                    field.visibleAnnotations.add(sideAnnotation);
+            processed.fields.stream().filter(field -> this.getEquivalent(field, mergeClassNode) == null).forEach(field -> {
+                if (field.visibleAnnotations == null) {
+                    field.visibleAnnotations = new ArrayList<>();
                 }
-            }
-            for (FieldNode field : mergeClassNode.fields) {
-                if (this.getEquivalent(field, processed) == null) {
-                    if (field.visibleAnnotations == null) {
-                        field.visibleAnnotations = new ArrayList<>();
-                    }
-                    field.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
-                    processed.fields.add(field);
+                field.visibleAnnotations.add(sideAnnotation);
+            });
+            mergeClassNode.fields.stream().filter(field -> this.getEquivalent(field, processed) == null).forEach(field -> {
+                if (field.visibleAnnotations == null) {
+                    field.visibleAnnotations = new ArrayList<>();
                 }
-            }
-
-            for (MethodNode method : processed.methods) {
-                if (this.getEquivalent(method, mergeClassNode) == null) {
-                    if (method.visibleAnnotations == null) {
-                        method.visibleAnnotations = new ArrayList<>();
-                    }
-                    method.visibleAnnotations.add(sideAnnotation);
+                field.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
+                processed.fields.add(field);
+            });
+            processed.methods.stream().filter(method -> this.getEquivalent(method, mergeClassNode) == null).forEach(method -> {
+                if (method.visibleAnnotations == null) {
+                    method.visibleAnnotations = new ArrayList<>();
                 }
-            }
-            for (MethodNode method : mergeClassNode.methods) {
-                if (this.getEquivalent(method, processed) == null) {
-                    if (method.visibleAnnotations == null) {
-                        method.visibleAnnotations = new ArrayList<>();
-                    }
-                    method.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
-                    processed.methods.add(method);
+                method.visibleAnnotations.add(sideAnnotation);
+            });
+            mergeClassNode.methods.stream().filter(method -> this.getEquivalent(method, processed) == null).forEach(method -> {
+                if (method.visibleAnnotations == null) {
+                    method.visibleAnnotations = new ArrayList<>();
                 }
-            }
+                method.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
+                processed.methods.add(method);
+            });
         } else {
             if (processed.visibleAnnotations == null) {
                 processed.visibleAnnotations = new ArrayList<>();
