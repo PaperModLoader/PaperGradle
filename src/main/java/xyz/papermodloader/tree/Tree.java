@@ -33,7 +33,7 @@ public class Tree implements Plugin<Project> {
                 e.printStackTrace();
             }
         })).dependsOn(Constants.TASK_DOWNLOAD_ASSETS, Constants.TASK_DOWNLOAD_LIBRARIES);
-        this.addTask(Constants.TASK_DOWNLOAD_LIBRARIES, DownloadLibrariesTask.class);
+        this.addTask(Constants.TASK_DOWNLOAD_LIBRARIES, DownloadLibrariesTask.class).dependsOn(Constants.TASK_DOWNLOAD_MAPPINGS);
         this.addTask(Constants.TASK_DOWNLOAD_MAPPINGS, DownloadTask.class, task -> task.setInit(download -> {
             try {
                 task.setCache(Constants.CLIENT_JAR_CACHE.get().getName());
