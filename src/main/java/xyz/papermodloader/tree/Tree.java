@@ -73,6 +73,9 @@ public class Tree implements Plugin<Project> {
             this.getProject().getLogger().lifecycle("Tree " + Tree.VERSION);
             this.getProject().getLogger().lifecycle("https://github.com/PaperModLoader/Tree");
             this.getProject().getLogger().lifecycle("======================================");
+            this.getProject().getLogger().lifecycle("Powered by Enigma");
+            this.getProject().getLogger().lifecycle("http://www.cuchazinteractive.com/");
+            this.getProject().getLogger().lifecycle("======================================");
             this.headerDisplayed = true;
         }
     }
