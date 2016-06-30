@@ -28,7 +28,7 @@ public class MakeMinecraftTask extends DefaultTask {
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
             String name = entry.getName();
-            if (name.startsWith("assets") || name.endsWith(".png")) {
+            if (name.startsWith("assets") || name.endsWith(".png")|| name.endsWith(".xml")) {
                 out.putNextEntry(entry);
                 IOUtils.copy(client.getInputStream(entry), out);
                 out.closeEntry();
