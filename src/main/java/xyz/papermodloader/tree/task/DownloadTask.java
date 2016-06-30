@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.function.Consumer;
 
 public class DownloadTask extends DefaultTask {
-    private String cache;
+    private File cache;
     private File file;
     private URL url;
     private String sha1;
@@ -21,14 +21,13 @@ public class DownloadTask extends DefaultTask {
     @TaskAction
     public void doTask() throws IOException {
         this.init.accept(this);
-        File cache = new File(Constants.CACHE_DIRECTORY, this.cache);
-        if (!cache.exists() || (this.sha1 != null && !HashUtil.equalHash(cache, this.sha1))) {
+        if (!cache.exists() || (this.sha1 != null && !HashUtil.equalHash(this.cache, this.sha1))) {
             if (this.file != null && this.file.exists()) {
-                FileUtils.copyFile(this.file, cache);
-                this.getLogger().info(":found fallback for " + this.cache);
+                FileUtils.copyFile(this.file, this.cache);
+                this.getLogger().info(":found fallback for " + this.cache.getName());
             } else {
-                FileUtils.copyURLToFile(this.url, cache);
-                this.getLogger().info(":downloading " + this.cache);
+                FileUtils.copyURLToFile(this.url, this.cache);
+                this.getLogger().info(":downloading " + this.cache.getName());
             }
         }
     }
@@ -37,7 +36,7 @@ public class DownloadTask extends DefaultTask {
         this.init = function;
     }
 
-    public void setCache(String cache) {
+    public void setCache(File cache) {
         this.cache = cache;
     }
 

@@ -27,7 +27,8 @@ public class MakeMinecraftTask extends DefaultTask {
         Enumeration<? extends ZipEntry> entries = client.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
-            if (entry.getName().startsWith("assets")) {
+            String name = entry.getName();
+            if (name.startsWith("assets") || name.endsWith(".png")) {
                 out.putNextEntry(entry);
                 IOUtils.copy(client.getInputStream(entry), out);
                 out.closeEntry();

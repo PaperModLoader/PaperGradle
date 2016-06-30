@@ -31,7 +31,7 @@ public class Constants {
     public static final Delayed<File> DEOBF_MERGED_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, Tree.INSTANCE.getExtension().minecraft + "-merged-deobf.jar"));
     public static final File MINECRAFT_DECOMPILED_CACHE = new File(CACHE_DIRECTORY, "unpackaged");
     public static final Delayed<File> MINECRAFT_LIBRARY_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "minecraft-" + Tree.INSTANCE.getExtension().minecraft + ".jar"));
-    public static final Delayed<File> MAPPINGS_FILE_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, Tree.INSTANCE.getExtension().minecraft + "-" + Tree.INSTANCE.getExtension().mappings + ".mappings"));
+    public static final Delayed<File> MAPPINGS_FILE_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + Tree.INSTANCE.getExtension().minecraft + "-" + Tree.INSTANCE.getExtension().mappings + ".mappings"));
 
     public static final File NATIVES_DIRECTORY = new File(Constants.CACHE_DIRECTORY, "natives");
 

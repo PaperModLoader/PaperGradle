@@ -25,7 +25,7 @@ public class Tree implements Plugin<Project> {
 
         this.addTask(Constants.TASK_DOWNLOAD_CLIENT, DownloadTask.class, task -> task.setInit(download -> {
             try {
-                task.setCache(Constants.CLIENT_JAR_CACHE.get().getName());
+                task.setCache(Constants.CLIENT_JAR_CACHE.get());
                 task.setFile(Constants.CLIENT_JAR.get());
                 task.setURL(new URL(Constants.CLIENT_DOWNLOAD.get().url));
                 task.setSHA1(Constants.CLIENT_DOWNLOAD.get().sha1);
@@ -36,7 +36,7 @@ public class Tree implements Plugin<Project> {
         this.addTask(Constants.TASK_DOWNLOAD_LIBRARIES, DownloadLibrariesTask.class).dependsOn(Constants.TASK_DOWNLOAD_MAPPINGS);
         this.addTask(Constants.TASK_DOWNLOAD_MAPPINGS, DownloadTask.class, task -> task.setInit(download -> {
             try {
-                task.setCache(Constants.MAPPINGS_FILE_CACHE.get().getName());
+                task.setCache(Constants.MAPPINGS_FILE_CACHE.get());
                 task.setURL(new URL("http://ci.ilexiconn.net/job/Cardboard/" + this.getExtension().mappings + "/artifact/" + this.getExtension().minecraft + ".mappings"));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -44,7 +44,7 @@ public class Tree implements Plugin<Project> {
         }));
         this.addTask(Constants.TASK_DOWNLOAD_SERVER, DownloadTask.class, task -> task.setInit(download -> {
             try {
-                task.setCache(Constants.SERVER_JAR_CACHE.get().getName());
+                task.setCache(Constants.SERVER_JAR_CACHE.get());
                 task.setURL(new URL(Constants.SERVER_DOWNLOAD.get().url));
                 task.setSHA1(Constants.SERVER_DOWNLOAD.get().sha1);
             } catch (IOException e) {
