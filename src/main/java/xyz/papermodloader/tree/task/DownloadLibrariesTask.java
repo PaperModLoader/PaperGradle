@@ -23,7 +23,7 @@ public class DownloadLibrariesTask extends DefaultTask {
         LauncherManifest.ManifestVersion.Version.Library[] libraries = Constants.VERSION.get().libraries;
         LauncherManifest.ManifestVersion.Version.Library launchWrapper = new LauncherManifest.ManifestVersion.Version.Library();
         launchWrapper.name = "net.minecraft:launchwrapper:1.11";
-        ArrayUtils.add(libraries, launchWrapper);
+        Constants.VERSION.get().libraries = ArrayUtils.add(libraries, launchWrapper);
         ProgressLogger progressLogger = this.getServices().get(ProgressLoggerFactory.class).newOperation(this.getClass());
         progressLogger.start(":downloadLibraries", ":libraries");
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
