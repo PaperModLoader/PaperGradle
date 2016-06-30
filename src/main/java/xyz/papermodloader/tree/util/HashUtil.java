@@ -1,8 +1,8 @@
 package xyz.papermodloader.tree.util;
 
-import org.gradle.internal.impldep.com.google.common.hash.HashCode;
-import org.gradle.internal.impldep.com.google.common.hash.Hashing;
-import org.gradle.internal.impldep.com.google.common.io.Files;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
 
 import java.io.File;
 import java.io.IOException;
