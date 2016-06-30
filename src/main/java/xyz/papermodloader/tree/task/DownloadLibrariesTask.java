@@ -23,7 +23,7 @@ public class DownloadLibrariesTask extends DefaultTask {
         LauncherManifest.ManifestVersion.Version.Library[] libraries = Constants.VERSION.get().libraries;
         LauncherManifest.ManifestVersion.Version.Library launchWrapper = new LauncherManifest.ManifestVersion.Version.Library();
         launchWrapper.name = "net.minecraft:launchwrapper:1.11";
-        Constants.VERSION.get().libraries = ArrayUtils.add(libraries, launchWrapper);
+        Constants.VERSION.get().libraries = libraries = ArrayUtils.add(libraries, launchWrapper);
         ProgressLogger progressLogger = this.getServices().get(ProgressLoggerFactory.class).newOperation(this.getClass());
         progressLogger.start(":downloadLibraries", ":libraries");
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
@@ -36,7 +36,7 @@ public class DownloadLibrariesTask extends DefaultTask {
                         String path = "libraries" + File.separator + library.getFile();
                         File file = new File(Constants.MINECRAFT_DIRECTORY.get(), path);
                         File target = new File(Constants.CACHE_DIRECTORY, path);
-                        if (!file.exists() || !HashUtil.equalHash(file, library.getSHA1())) {
+                        if (file.exists() && HashUtil.equalHash(file, library.getSHA1())) {
                             FileUtils.copyFile(file, target);
                         } else {
                             this.getLogger().info(":downloading library " + library.name);
