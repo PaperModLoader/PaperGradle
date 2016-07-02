@@ -2,6 +2,9 @@ package xyz.papermodloader.tree;
 
 import com.google.common.collect.ImmutableMap;
 import org.gradle.api.*;
+import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
+import org.gradle.api.plugins.JavaBasePlugin;
+import org.gradle.api.plugins.JavaPlugin;
 import xyz.papermodloader.tree.task.*;
 
 import java.io.IOException;
@@ -18,11 +21,19 @@ public class Tree implements Plugin<Project> {
     public void apply(Project project) {
         Tree.INSTANCE = this;
         this.project = project;
+
+        //Configure project
         this.project.apply(ImmutableMap.of("plugin", "java"));
         this.project.apply(ImmutableMap.of("plugin", "idea"));
+        this.project.apply(ImmutableMap.of("plugin", "eclipse"));
         this.project.afterEvaluate(p -> this.afterEvaluate());
         this.project.getExtensions().create("paper", TreeExtension.class);
+        this.project.getConfigurations().maybeCreate(Constants.CONFIG_DEPENDENCIES);
+        this.project.getConfigurations().maybeCreate(Constants.CONFIG_NATIVES);
+        this.project.getDependencies().add(JavaPlugin.COMPILE_CONFIGURATION_NAME, project.fileTree("libs"));
+        this.addMavenRepo("mojang", "https://libraries.minecraft.net/");
 
+        //Setup tasks
         this.addTask(Constants.TASK_DOWNLOAD_CLIENT, DownloadTask.class, task -> task.setInit(download -> {
             try {
                 task.setCache(Constants.CLIENT_JAR_CACHE.get());
@@ -32,8 +43,7 @@ public class Tree implements Plugin<Project> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        })).dependsOn(Constants.TASK_DOWNLOAD_ASSETS, Constants.TASK_DOWNLOAD_LIBRARIES);
-        this.addTask(Constants.TASK_DOWNLOAD_LIBRARIES, DownloadLibrariesTask.class).dependsOn(Constants.TASK_DOWNLOAD_MAPPINGS);
+        })).dependsOn(Constants.TASK_DOWNLOAD_ASSETS);
         this.addTask(Constants.TASK_DOWNLOAD_MAPPINGS, DownloadTask.class, task -> task.setInit(download -> {
             try {
                 task.setCache(Constants.MAPPINGS_FILE_CACHE.get());
@@ -50,9 +60,9 @@ public class Tree implements Plugin<Project> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        })).dependsOn(Constants.TASK_DOWNLOAD_LIBRARIES);
+        }));
         this.addTask(Constants.TASK_DOWNLOAD_ASSETS, DownloadAssetsTask.class);
-        this.addTask(Constants.TASK_MERGE, MergeTask.class).dependsOn(Constants.TASK_DOWNLOAD_CLIENT, Constants.TASK_DOWNLOAD_SERVER);
+        this.addTask(Constants.TASK_MERGE, MergeTask.class).dependsOn(Constants.TASK_DOWNLOAD_CLIENT, Constants.TASK_DOWNLOAD_SERVER, Constants.TASK_DOWNLOAD_MAPPINGS);
         this.addTask(Constants.TASK_DEOBFUSCATE, DeobfuscateTask.class).dependsOn(Constants.TASK_MERGE);
         this.addTask(Constants.TASK_GENERATE_OBF_INDEX, GenerateIndexTask.class, task -> task.setInit(generate -> {
             task.setInput(Constants.MERGED_JAR_CACHE.get());
@@ -64,28 +74,47 @@ public class Tree implements Plugin<Project> {
         })).dependsOn(Constants.TASK_DEOBFUSCATE);
         this.addTask(Constants.TASK_MAKE_MINECRAFT, MakeMinecraftTask.class).dependsOn(Constants.TASK_GENERATE_OBF_INDEX, Constants.TASK_GENERATE_DEOBF_INDEX);
         this.addTask(Constants.TASK_SETUP, DefaultTask.class).dependsOn(Constants.TASK_MAKE_MINECRAFT);
-        this.addTask(Constants.TASK_IDEA, IDEAProjectTask.class).dependsOn("idea");
+        this.addTask(Constants.TASK_DOWNLOAD_LIBRARIES, DownloadLibrariesTask.class);
+        this.addTask(Constants.TASK_EXTRACT_NATIVES, ExtractNativesTask.class).dependsOn(Constants.TASK_DOWNLOAD_LIBRARIES);
+        this.addTask(Constants.TASK_IDEA, IDEAProjectTask.class).dependsOn("idea", Constants.TASK_EXTRACT_NATIVES);
+
+        //Build tasks
+        this.project.getTasks().getByName("compileJava").dependsOn(Constants.TASK_DOWNLOAD_LIBRARIES);
+        this.addTask(Constants.TASK_GENERATE_HOOKS, GenerateHooksTask.class).dependsOn(JavaBasePlugin.BUILD_TASK_NAME);
+        this.addTask(Constants.TASK_MAKE_PAPER, MakePaperTask.class).dependsOn(Constants.TASK_GENERATE_HOOKS);
+        this.addTask(Constants.TASK_BUILD, DefaultTask.class).dependsOn(Constants.TASK_MAKE_PAPER);
     }
 
     private void afterEvaluate() {
         if (!this.headerDisplayed) {
-            this.getProject().getLogger().lifecycle("======================================");
-            this.getProject().getLogger().lifecycle("Tree " + Tree.VERSION);
-            this.getProject().getLogger().lifecycle("https://github.com/PaperModLoader/Tree");
-            this.getProject().getLogger().lifecycle("======================================");
-            this.getProject().getLogger().lifecycle("Powered by Enigma");
-            this.getProject().getLogger().lifecycle("http://www.cuchazinteractive.com/");
-            this.getProject().getLogger().lifecycle("======================================");
+            this.project.getLogger().lifecycle("======================================");
+            this.project.getLogger().lifecycle("Tree " + Tree.VERSION);
+            this.project.getLogger().lifecycle("https://github.com/PaperModLoader/Tree");
+            this.project.getLogger().lifecycle("======================================");
+            this.project.getLogger().lifecycle("Powered by Enigma");
+            this.project.getLogger().lifecycle("http://www.cuchazinteractive.com/");
+            this.project.getLogger().lifecycle("======================================");
             this.headerDisplayed = true;
         }
     }
 
     private <T extends Task> T addTask(String name, Class<? extends T> task) {
-        return this.project.getTasks().create(name, task);
+        T t = this.project.getTasks().create(name, task);
+        t.setGroup("Tree");
+        return t;
     }
 
     private <T extends Task> T addTask(String name, Class<? extends T> task, Action<T> action) {
-        return this.project.getTasks().create(name, task, action);
+        T t = this.project.getTasks().create(name, task, action);
+        t.setGroup("Tree");
+        return t;
+    }
+
+    public MavenArtifactRepository addMavenRepo(String name, String url) {
+        return this.project.getRepositories().maven(repo -> {
+            repo.setName(name);
+            repo.setUrl(url);
+        });
     }
 
     public TreeExtension getExtension() {

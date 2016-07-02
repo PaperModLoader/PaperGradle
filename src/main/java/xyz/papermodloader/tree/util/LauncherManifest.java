@@ -10,7 +10,6 @@ import java.net.URL;
 import java.util.Map;
 
 public class LauncherManifest {
-    public Latest latest;
     public ManifestVersion[] versions;
 
     public static LauncherManifest getLauncherManifest() throws IOException {
@@ -29,16 +28,8 @@ public class LauncherManifest {
         return null;
     }
 
-    public class Latest {
-        public String snapshot;
-        public String release;
-    }
-
     public static class ManifestVersion {
         public String id;
-        public String type;
-        public String time;
-        public String releaseTime;
         public String url;
 
         public Version getVersion() throws IOException {
@@ -50,24 +41,13 @@ public class LauncherManifest {
 
         public static class Version {
             public AssetIndex assetIndex;
-            public String assets;
             public Downloads downloads;
-            public String id;
             public Library[] libraries;
-            public Logging logging;
-            public String mainClass;
-            public String minecraftArguments;
-            public int minimumLauncherVersion;
-            public String releaseTime;
-            public String time;
-            public String type;
 
             public static class AssetIndex {
                 public String id;
                 public String sha1;
-                public String size;
                 public String url;
-                public String totalSize;
 
                 public Assets getAssets() throws IOException {
                     File file = new File(Constants.ASSET_DIRECTORY_CACHE, "indexes" + File.separator + this.id + ".json");
@@ -82,7 +62,6 @@ public class LauncherManifest {
 
                     public class AssetEntry {
                         public String hash;
-                        public int size;
                     }
                 }
             }
@@ -93,7 +72,6 @@ public class LauncherManifest {
 
                 public class Download {
                     public String sha1;
-                    public int size;
                     public String url;
                 }
             }
@@ -101,41 +79,9 @@ public class LauncherManifest {
             public static class Library {
                 public String name;
                 public JsonObject natives;
-                public JsonObject downloads;
+                private Artifact artifact;
 
                 public Rule[] rules;
-
-                public String getURL() {
-                    String path;
-                    String[] parts = this.name.split(":", 3);
-                    path = parts[0].replace(".", "/") + "/" + parts[1] + "/" + parts[2] + "/" + parts[1] + "-" + parts[2] + getClassifier() + ".jar";
-                    return "https://libraries.minecraft.net/" + path;
-                }
-
-                public String getFile() {
-                    String[] parts = this.name.split(":", 3);
-                    return parts[0].replace(".", File.separator) + File.separator + parts[1] + File.separator + parts[2] + File.separator + parts[1] + "-" + parts[2] + getClassifier() + ".jar";
-                }
-
-                public String getSHA1() {
-                    if (this.downloads == null) {
-                        return "";
-                    } else if (this.downloads.getAsJsonObject("artifact") == null) {
-                        return "";
-                    } else if (this.downloads.getAsJsonObject("artifact").get("sha1") == null) {
-                        return "";
-                    } else {
-                        return this.downloads.getAsJsonObject("artifact").get("sha1").getAsString();
-                    }
-                }
-
-                public String getClassifier() {
-                    if (natives == null) {
-                        return "";
-                    } else {
-                        return "-" + natives.get(OperatingSystem.getOS().replace("${arch}", OperatingSystem.getArch())).getAsString().replace("\"", "");
-                    }
-                }
 
                 public boolean isAllowed() {
                     if (this.rules != null && this.rules.length > 0) {
@@ -156,6 +102,50 @@ public class LauncherManifest {
 
                     return true;
                 }
+
+                public String getArtifactName() {
+                    if (this.artifact == null) {
+                        this.artifact = new Artifact(this.name);
+                    }
+                    return this.artifact.getArtifact(this.natives == null ? this.artifact.getClassifier() : this.natives.get(OperatingSystem.getOS()).getAsString());
+                }
+
+                private class Artifact {
+                    private String domain, name, version, classifier, ext;
+
+                    public Artifact(String name) {
+                        String[] splitedArtifact = name.split(":");
+                        int idx = splitedArtifact[splitedArtifact.length - 1].indexOf('@');
+                        if (idx != -1) {
+                            this.ext = splitedArtifact[splitedArtifact.length - 1].substring(idx + 1);
+                            splitedArtifact[splitedArtifact.length - 1] = splitedArtifact[splitedArtifact.length - 1].substring(0, idx);
+                        } else {
+                            this.ext = "jar";
+                        }
+                        this.domain = splitedArtifact[0];
+                        this.name = splitedArtifact[1];
+                        this.version = splitedArtifact[2];
+                        this.classifier = splitedArtifact.length > 3 ? splitedArtifact[3] : null;
+                    }
+
+                    public String getArtifact(String classifier) {
+                        String ret = this.domain + ":" + this.name + ":" + this.version;
+                        if (classifier != null && classifier.indexOf('$') > -1) {
+                            classifier = classifier.replace("${arch}", OperatingSystem.getArch());
+                        }
+                        if (classifier != null) {
+                            ret += ":" + classifier;
+                        }
+                        if (!"jar".equals(this.ext)) {
+                            ret += "@" + this.ext;
+                        }
+                        return ret;
+                    }
+
+                    public String getClassifier() {
+                        return this.classifier;
+                    }
+                }
             }
 
             public static class Rule {
@@ -164,23 +154,6 @@ public class LauncherManifest {
 
                 private class OS {
                     String name;
-                }
-            }
-        }
-
-        public static class Logging {
-            public Client client;
-
-            public static class Client {
-                public File file;
-                public String argument;
-                public String type;
-
-                public static class File {
-                    public String id;
-                    public String sha1;
-                    public int size;
-                    public String url;
                 }
             }
         }

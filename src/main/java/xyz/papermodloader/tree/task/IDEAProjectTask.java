@@ -6,9 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import xyz.papermodloader.tree.Constants;
 import xyz.papermodloader.tree.Tree;
-import xyz.papermodloader.tree.util.LauncherManifest;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.*;
@@ -30,15 +28,6 @@ public class IDEAProjectTask extends DefaultTask {
 
             content.appendChild(createSourceFolder(document, "file://$MODULE_DIR$/src/main/java", false));
             content.appendChild(createSourceFolder(document, "file://$MODULE_DIR$/src/main/resources", true));
-
-            component.appendChild(this.createLibrary(document, "jar://" + Constants.MINECRAFT_LIBRARY_JAR_CACHE.get().getAbsolutePath() + "!/"));
-
-            for (LauncherManifest.ManifestVersion.Version.Library library : Constants.VERSION.get().libraries) {
-                if (library.isAllowed()) {
-                    File file = new File(Constants.CACHE_DIRECTORY, "libraries" + File.separator + library.getFile());
-                    component.appendChild(this.createLibrary(document, "jar://" + file.getAbsolutePath() + "!/"));
-                }
-            }
 
             this.save(projectFile, document);
 
@@ -75,21 +64,6 @@ public class IDEAProjectTask extends DefaultTask {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private Element createLibrary(Document document, String url) {
-        Element orderEntry = document.createElement("orderEntry");
-        orderEntry.setAttribute("type", "module-library");
-        Element library = document.createElement("library");
-        Element classes = document.createElement("CLASSES");
-        Element root = document.createElement("root");
-        root.setAttribute("url", url);
-        classes.appendChild(root);
-        library.appendChild(classes);
-        library.appendChild(document.createElement("JAVADOC"));
-        library.appendChild(document.createElement("SOURCES"));
-        orderEntry.appendChild(library);
-        return orderEntry;
     }
 
     private void save(File projectFile, Document document) throws TransformerException {

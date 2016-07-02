@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Constants {
+    //Setup tasks
     public static final String TASK_DOWNLOAD_ASSETS = "downloadAssets";
     public static final String TASK_DOWNLOAD_CLIENT = "downloadClient";
     public static final String TASK_DOWNLOAD_LIBRARIES = "downloadLibraries";
@@ -18,8 +19,17 @@ public class Constants {
     public static final String TASK_GENERATE_OBF_INDEX = "generateObfIndex";
     public static final String TASK_GENERATE_DEOBF_INDEX = "generateDeobfIndex";
     public static final String TASK_MAKE_MINECRAFT = "makeMinecraft";
+    public static final String TASK_EXTRACT_NATIVES = "extractNatives";
     public static final String TASK_SETUP = "setupPaper";
     public static final String TASK_IDEA = "setupIDEA";
+
+    //Build tasks
+    public static final String TASK_GENERATE_HOOKS = "generateHooks";
+    public static final String TASK_MAKE_PAPER = "makePaper";
+    public static final String TASK_BUILD = "buildPaper";
+
+    public static final String CONFIG_DEPENDENCIES = "paperDependencies";
+    public static final String CONFIG_NATIVES = "paperNatives";
 
     public static final File CACHE_DIRECTORY = new File(Tree.INSTANCE.getProject().getGradle().getGradleUserHomeDir(), "caches/paper/");
     public static final Delayed<File> ASSET_DIRECTORY = new DelayedCache<>(() -> new File(Constants.MINECRAFT_DIRECTORY.get(), "assets"));
@@ -35,6 +45,9 @@ public class Constants {
     public static final Delayed<File> MINECRAFT_LIBRARY_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "minecraft-" + Tree.INSTANCE.getExtension().minecraft + ".jar"));
     public static final Delayed<File> MAPPINGS_FILE_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + Tree.INSTANCE.getExtension().minecraft + "-" + Tree.INSTANCE.getExtension().mappings + ".mappings"));
 
+    public static final File TEMP_DIRECTORY = new File(Constants.CACHE_DIRECTORY, "temp");
+    public static final Delayed<File> TEMP_HOOKS_FILE = new DelayedCache<>(() -> new File(TEMP_DIRECTORY, "paper.hooks"));
+    public static final Delayed<File> RESULT_JAR = new DelayedCache<>(() -> new File(Tree.INSTANCE.getProject().getRootDir(), "build" + File.separator + "libs" + File.separator + Tree.INSTANCE.getProject().getName() + "-" + Tree.INSTANCE.getProject().getVersion() + ".jar"));
     public static final File NATIVES_DIRECTORY = new File(Constants.CACHE_DIRECTORY, "natives");
 
     public static final Delayed<File> MINECRAFT_DIRECTORY = new DelayedCache<>(() -> {
