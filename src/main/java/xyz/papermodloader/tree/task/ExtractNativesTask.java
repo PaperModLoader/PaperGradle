@@ -14,12 +14,12 @@ import java.util.zip.ZipFile;
 public class ExtractNativesTask extends DefaultTask {
     @TaskAction
     public void doTask() {
-        if (!Constants.NATIVES_DIRECTORY.exists()) {
+        if (!Constants.NATIVES_DIRECTORY_CACHE.exists()) {
             for (File source : this.getProject().getConfigurations().getByName(Constants.CONFIG_NATIVES)) {
                 try {
                     ZipFile zip = new ZipFile(source);
                     Enumeration<? extends ZipEntry> entries = zip.entries();
-                    File nativesDirectory = Constants.NATIVES_DIRECTORY;
+                    File nativesDirectory = Constants.NATIVES_DIRECTORY_CACHE;
                     if (!nativesDirectory.exists()) {
                         nativesDirectory.mkdir();
                     }

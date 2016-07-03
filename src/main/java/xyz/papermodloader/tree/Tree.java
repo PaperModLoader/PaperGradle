@@ -80,8 +80,7 @@ public class Tree implements Plugin<Project> {
 
         //Build tasks
         this.project.getTasks().getByName("compileJava").dependsOn(Constants.TASK_DOWNLOAD_LIBRARIES);
-        this.addTask(Constants.TASK_GENERATE_HOOKS, GenerateHooksTask.class).dependsOn(JavaBasePlugin.BUILD_TASK_NAME);
-        this.addTask(Constants.TASK_MAKE_PAPER, MakePaperTask.class).dependsOn(Constants.TASK_GENERATE_HOOKS);
+        this.addTask(Constants.TASK_MAKE_PAPER, MakePaperTask.class).dependsOn(JavaBasePlugin.BUILD_TASK_NAME);
         this.addTask(Constants.TASK_BUILD, DefaultTask.class).dependsOn(Constants.TASK_MAKE_PAPER);
     }
 

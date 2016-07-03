@@ -24,7 +24,6 @@ public class Constants {
     public static final String TASK_IDEA = "setupIDEA";
 
     //Build tasks
-    public static final String TASK_GENERATE_HOOKS = "generateHooks";
     public static final String TASK_MAKE_PAPER = "makePaper";
     public static final String TASK_BUILD = "buildPaper";
 
@@ -44,11 +43,9 @@ public class Constants {
     public static final Delayed<File> DEOBF_INDEX_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + "indexes" + File.separator + Tree.INSTANCE.getExtension().minecraft + "-" + Tree.INSTANCE.getExtension().mappings + "-deobf.index"));
     public static final Delayed<File> MINECRAFT_LIBRARY_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "minecraft-" + Tree.INSTANCE.getExtension().minecraft + ".jar"));
     public static final Delayed<File> MAPPINGS_FILE_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + Tree.INSTANCE.getExtension().minecraft + "-" + Tree.INSTANCE.getExtension().mappings + ".mappings"));
+    public static final File NATIVES_DIRECTORY_CACHE = new File(Constants.CACHE_DIRECTORY, "natives");
 
-    public static final File TEMP_DIRECTORY = new File(Constants.CACHE_DIRECTORY, "temp");
-    public static final Delayed<File> TEMP_HOOKS_FILE = new DelayedCache<>(() -> new File(TEMP_DIRECTORY, "paper.hooks"));
     public static final Delayed<File> RESULT_JAR = new DelayedCache<>(() -> new File(Tree.INSTANCE.getProject().getRootDir(), "build" + File.separator + "libs" + File.separator + Tree.INSTANCE.getProject().getName() + "-" + Tree.INSTANCE.getProject().getVersion() + ".jar"));
-    public static final File NATIVES_DIRECTORY = new File(Constants.CACHE_DIRECTORY, "natives");
 
     public static final Delayed<File> MINECRAFT_DIRECTORY = new DelayedCache<>(() -> {
         String os = System.getProperty("os.name").toLowerCase();

@@ -31,9 +31,6 @@ public class MakePaperTask extends DefaultTask {
             out.putNextEntry(new ZipEntry(Tree.INSTANCE.getExtension().minecraft + "-deobf.index"));
             FileUtils.copyFile(Constants.DEOBF_INDEX_CACHE.get(), out);
             out.closeEntry();
-            out.putNextEntry(new ZipEntry("paper.hooks"));
-            FileUtils.copyFile(Constants.TEMP_HOOKS_FILE.get(), out);
-            out.closeEntry();
             Enumeration<? extends ZipEntry> entries = buildZip.entries();
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
