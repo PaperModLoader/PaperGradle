@@ -24,6 +24,10 @@ repositories {
         name = "cuchaz"
         url = "http://maven.cuchazinteractive.com"
     }
+    maven {
+        name = "ilexiconn"
+        url = "http://maven.ilexiconn.net"
+    }
 }
 
 build.dependsOn(shadowJar)
@@ -35,6 +39,7 @@ dependencies {
     shade "cuchaz:enigma-lib:0.11b"
     shade "org.ow2.asm:asm-debug-all:5.1"
     shade "org.apache.commons:commons-lang3:3.4"
+    shade "xyz.papermodloader:book:0.1.0.1"
 }
 
 sourceSets {

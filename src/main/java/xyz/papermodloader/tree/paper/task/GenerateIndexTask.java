@@ -1,4 +1,4 @@
-package xyz.papermodloader.tree.task;
+package xyz.papermodloader.tree.paper.task;
 
 import cuchaz.enigma.Constants;
 import cuchaz.enigma.analysis.JarClassIterator;

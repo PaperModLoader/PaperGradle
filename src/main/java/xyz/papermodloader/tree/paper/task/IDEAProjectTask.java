@@ -1,4 +1,4 @@
-package xyz.papermodloader.tree.task;
+package xyz.papermodloader.tree.paper.task;
 
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import xyz.papermodloader.tree.Tree;
+import xyz.papermodloader.tree.paper.PaperTree;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.*;
@@ -16,7 +16,7 @@ import java.io.File;
 
 public class IDEAProjectTask extends DefaultTask {
     @TaskAction
-    public void create() {
+    public void doTask() {
         try {
             String projectName = this.getProject().getName();
 
@@ -49,7 +49,7 @@ public class IDEAProjectTask extends DefaultTask {
                 }
             }
 
-            String workingDirectory = Tree.INSTANCE.getExtension().workingDirectory;
+            String workingDirectory = PaperTree.INSTANCE.getExtension().workingDirectory;
             String ideaWorkingDirectory = "file://$PROJECT_DIR$/" + workingDirectory;
             runManager.appendChild(this.createRunConfiguration(document, runManager, "xyz.papermodloader.paper.launcher.PaperClient", projectName, "Minecraft Client", ideaWorkingDirectory));
             runManager.appendChild(this.createRunConfiguration(document, runManager, "xyz.papermodloader.paper.launcher.PaperServer", projectName, "Minecraft Server", ideaWorkingDirectory));

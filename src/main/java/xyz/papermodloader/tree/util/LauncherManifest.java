@@ -3,7 +3,7 @@ package xyz.papermodloader.tree.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.commons.io.FileUtils;
-import xyz.papermodloader.tree.Constants;
+import xyz.papermodloader.tree.paper.PaperConstants;
 
 import java.io.*;
 import java.net.URL;
@@ -50,7 +50,7 @@ public class LauncherManifest {
                 public String url;
 
                 public Assets getAssets() throws IOException {
-                    File file = new File(Constants.ASSET_DIRECTORY_CACHE, "indexes" + File.separator + this.id + ".json");
+                    File file = new File(PaperConstants.ASSET_DIRECTORY_CACHE, "indexes" + File.separator + this.id + ".json");
                     if (!file.exists() || !HashUtil.equalHash(file, this.sha1)) {
                         FileUtils.copyInputStreamToFile(new URL(this.url).openStream(), file);
                     }

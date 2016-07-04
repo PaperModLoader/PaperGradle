@@ -1,4 +1,4 @@
-package xyz.papermodloader.tree.task;
+package xyz.papermodloader.tree.paper.task;
 
 import com.google.common.io.ByteStreams;
 import org.gradle.api.DefaultTask;
@@ -12,7 +12,7 @@ import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
 import xyz.papermodloader.paper.launcher.side.Side;
 import xyz.papermodloader.paper.launcher.side.SideDependent;
-import xyz.papermodloader.tree.Constants;
+import xyz.papermodloader.tree.paper.PaperConstants;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,8 +25,8 @@ public class MergeTask extends DefaultTask {
     @TaskAction
     public void doTask() {
         try {
-            ZipFile client = new ZipFile(Constants.CLIENT_JAR_CACHE.get());
-            ZipFile server = new ZipFile(Constants.SERVER_JAR_CACHE.get());
+            ZipFile client = new ZipFile(PaperConstants.CLIENT_JAR_CACHE.get());
+            ZipFile server = new ZipFile(PaperConstants.SERVER_JAR_CACHE.get());
 
             List<ZipEntry> clientClasses = new LinkedList<>();
             List<ZipEntry> serverClasses = new LinkedList<>();
@@ -58,7 +58,7 @@ public class MergeTask extends DefaultTask {
                 classes.put(new ZipEntry(serverClass.getName()), this.processClass(server, serverClass, null, null, Side.SERVER));
             }
 
-            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(Constants.MERGED_JAR_CACHE.get()));
+            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(PaperConstants.MERGED_JAR_CACHE.get()));
 
             for (Map.Entry<ZipEntry, byte[]> entry : classes.entrySet()) {
                 out.putNextEntry(entry.getKey());

@@ -1,4 +1,4 @@
-package xyz.papermodloader.tree.task;
+package xyz.papermodloader.tree.paper.task;
 
 import cuchaz.enigma.Deobfuscator;
 import cuchaz.enigma.mapping.MappingParseException;
@@ -7,7 +7,7 @@ import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.internal.logging.progress.ProgressLogger;
 import org.gradle.internal.logging.progress.ProgressLoggerFactory;
-import xyz.papermodloader.tree.Constants;
+import xyz.papermodloader.tree.paper.PaperConstants;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,9 +19,9 @@ public class DeobfuscateTask extends DefaultTask implements Deobfuscator.Progres
 
     @TaskAction
     public void doTask() throws InterruptedException, IOException, MappingParseException {
-        Deobfuscator deobfuscator = new Deobfuscator(new JarFile(Constants.MERGED_JAR_CACHE.get()));
-        deobfuscator.setMappings(new MappingsReader().read(new FileReader(Constants.MAPPINGS_FILE_CACHE.get())));
-        deobfuscator.writeJar(Constants.DEOBF_MERGED_JAR_CACHE.get(), this);
+        Deobfuscator deobfuscator = new Deobfuscator(new JarFile(PaperConstants.MERGED_JAR_CACHE.get()));
+        deobfuscator.setMappings(new MappingsReader().read(new FileReader(PaperConstants.MAPPINGS_FILE_CACHE.get())));
+        deobfuscator.writeJar(PaperConstants.DEOBF_MERGED_JAR_CACHE.get(), this);
         this.progressLogger.completed();
     }
 

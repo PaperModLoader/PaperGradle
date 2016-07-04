@@ -1,4 +1,4 @@
-package xyz.papermodloader.tree.task;
+package xyz.papermodloader.tree.paper.task;
 
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;

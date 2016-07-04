@@ -1,6 +1,6 @@
-package xyz.papermodloader.tree;
+package xyz.papermodloader.tree.paper;
 
-public class TreeExtension {
+public class PaperExtension {
     public String minecraft;
     public int mappings = 1;
     public String workingDirectory = "minecraft";

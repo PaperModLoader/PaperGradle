@@ -1,11 +1,11 @@
-package xyz.papermodloader.tree.task;
+package xyz.papermodloader.tree.paper.task;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
-import xyz.papermodloader.tree.Constants;
-import xyz.papermodloader.tree.Tree;
+import xyz.papermodloader.tree.paper.PaperConstants;
+import xyz.papermodloader.tree.paper.PaperTree;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,16 +20,16 @@ public class MakePaperTask extends DefaultTask {
         try {
             String buildFileName = this.getProject().getName() + "-" + this.getProject().getVersion();
             File temp = new File(this.getProject().getRootDir(), "build" + File.separator + "libs" + File.separator + buildFileName + "-temp.jar");
-            ZipFile buildZip = new ZipFile(Constants.RESULT_JAR.get());
+            ZipFile buildZip = new ZipFile(PaperConstants.RESULT_JAR.get());
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(temp));
-            out.putNextEntry(new ZipEntry(Tree.INSTANCE.getExtension().minecraft + ".mappings"));
-            FileUtils.copyFile(Constants.MAPPINGS_FILE_CACHE.get(), out);
+            out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + ".mappings"));
+            FileUtils.copyFile(PaperConstants.MAPPINGS_FILE_CACHE.get(), out);
             out.closeEntry();
-            out.putNextEntry(new ZipEntry(Tree.INSTANCE.getExtension().minecraft + "-obf.index"));
-            FileUtils.copyFile(Constants.OBF_INDEX_CACHE.get(), out);
+            out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + "-obf.index"));
+            FileUtils.copyFile(PaperConstants.OBF_INDEX_CACHE.get(), out);
             out.closeEntry();
-            out.putNextEntry(new ZipEntry(Tree.INSTANCE.getExtension().minecraft + "-deobf.index"));
-            FileUtils.copyFile(Constants.DEOBF_INDEX_CACHE.get(), out);
+            out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + "-deobf.index"));
+            FileUtils.copyFile(PaperConstants.DEOBF_INDEX_CACHE.get(), out);
             out.closeEntry();
             Enumeration<? extends ZipEntry> entries = buildZip.entries();
             while (entries.hasMoreElements()) {
@@ -40,8 +40,8 @@ public class MakePaperTask extends DefaultTask {
             }
             out.close();
             buildZip.close();
-            Constants.RESULT_JAR.get().delete();
-            temp.renameTo(Constants.RESULT_JAR.get());
+            PaperConstants.RESULT_JAR.get().delete();
+            temp.renameTo(PaperConstants.RESULT_JAR.get());
         } catch (Exception e) {
             e.printStackTrace();
         }
