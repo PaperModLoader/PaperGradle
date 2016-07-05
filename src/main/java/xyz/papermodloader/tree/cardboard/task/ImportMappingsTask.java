@@ -14,12 +14,6 @@ public class ImportMappingsTask extends DefaultTask implements ProgressLogger {
 
     @TaskAction
     public void doTask() throws IOException {
-        if (CardboardConstants.ENIGMA_MAPPINGS.get().exists()) {
-            String yn = System.console().readLine("Are you sure you want to overwrite " + CardboardConstants.ENIGMA_MAPPINGS.get().getName() + "? (Y/N) ");
-            if (!yn.equals("Y")) {
-                return;
-            }
-        }
         this.progressLogger = this.getServices().get(ProgressLoggerFactory.class).newOperation(this.getClass());
         this.progressLogger.start(":importMappings", ":import");
         Exporters.getExporter("enigma").export(CardboardConstants.BOOK_MAPPINGS.get(), CardboardConstants.ENIGMA_MAPPINGS.get(), this);
