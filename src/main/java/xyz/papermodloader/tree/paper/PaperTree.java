@@ -66,15 +66,7 @@ public class PaperTree extends Tree<PaperExtension> {
         this.addTask(PaperConstants.TASK_DOWNLOAD_ASSETS, DownloadAssetsTask.class);
         this.addTask(PaperConstants.TASK_MERGE, MergeTask.class).dependsOn(PaperConstants.TASK_DOWNLOAD_CLIENT, PaperConstants.TASK_DOWNLOAD_SERVER, PaperConstants.TASK_DOWNLOAD_MAPPINGS);
         this.addTask(PaperConstants.TASK_DEOBFUSCATE, DeobfuscateTask.class).dependsOn(PaperConstants.TASK_MERGE);
-        this.addTask(PaperConstants.TASK_GENERATE_OBF_INDEX, GenerateIndexTask.class, task -> task.setInit(generate -> {
-            task.setInput(PaperConstants.MERGED_JAR_CACHE.get());
-            task.setOutput(PaperConstants.OBF_INDEX_CACHE.get());
-        })).dependsOn(PaperConstants.TASK_DEOBFUSCATE);
-        this.addTask(PaperConstants.TASK_GENERATE_DEOBF_INDEX, GenerateIndexTask.class, task -> task.setInit(generate -> {
-            task.setInput(PaperConstants.DEOBF_MERGED_JAR_CACHE.get());
-            task.setOutput(PaperConstants.DEOBF_INDEX_CACHE.get());
-        })).dependsOn(PaperConstants.TASK_DEOBFUSCATE);
-        this.addTask(PaperConstants.TASK_MAKE_MINECRAFT, MakeMinecraftTask.class).dependsOn(PaperConstants.TASK_GENERATE_OBF_INDEX, PaperConstants.TASK_GENERATE_DEOBF_INDEX);
+        this.addTask(PaperConstants.TASK_MAKE_MINECRAFT, MakeMinecraftTask.class).dependsOn(PaperConstants.TASK_DEOBFUSCATE);
         this.addTask(PaperConstants.TASK_SETUP, DefaultTask.class).dependsOn(PaperConstants.TASK_MAKE_MINECRAFT);
         this.addTask(PaperConstants.TASK_DOWNLOAD_LIBRARIES, DownloadLibrariesTask.class);
         this.addTask(PaperConstants.TASK_EXTRACT_NATIVES, ExtractNativesTask.class).dependsOn(PaperConstants.TASK_DOWNLOAD_LIBRARIES);

@@ -17,8 +17,6 @@ public class PaperConstants {
     public static final String TASK_DOWNLOAD_SERVER = "downloadServer";
     public static final String TASK_MERGE = "merge";
     public static final String TASK_DEOBFUSCATE = "deobfuscate";
-    public static final String TASK_GENERATE_OBF_INDEX = "generateObfIndex";
-    public static final String TASK_GENERATE_DEOBF_INDEX = "generateDeobfIndex";
     public static final String TASK_MAKE_MINECRAFT = "makeMinecraft";
     public static final String TASK_EXTRACT_NATIVES = "extractNatives";
     public static final String TASK_SETUP = "setupPaper";
@@ -40,10 +38,8 @@ public class PaperConstants {
     public static final Delayed<File> SERVER_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, PaperTree.INSTANCE.getExtension().minecraft + "-server.jar"));
     public static final Delayed<File> MERGED_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, PaperTree.INSTANCE.getExtension().minecraft + "-merged.jar"));
     public static final Delayed<File> DEOBF_MERGED_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, PaperTree.INSTANCE.getExtension().minecraft + "-merged-deobf.jar"));
-    public static final Delayed<File> OBF_INDEX_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + "indexes" + File.separator + PaperTree.INSTANCE.getExtension().minecraft + "-" + PaperTree.INSTANCE.getExtension().mappings + "-obf.index"));
-    public static final Delayed<File> DEOBF_INDEX_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + "indexes" + File.separator + PaperTree.INSTANCE.getExtension().minecraft + "-" + PaperTree.INSTANCE.getExtension().mappings + "-deobf.index"));
     public static final Delayed<File> MINECRAFT_LIBRARY_JAR_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "minecraft-" + PaperTree.INSTANCE.getExtension().minecraft + ".jar"));
-    public static final Delayed<File> MAPPINGS_FILE_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + PaperTree.INSTANCE.getExtension().minecraft + "-" + PaperTree.INSTANCE.getExtension().mappings + ".mappings"));
+    public static final Delayed<File> MAPPINGS_FILE_CACHE = new DelayedCache<>(() -> new File(CACHE_DIRECTORY, "mappings" + File.separator + PaperTree.INSTANCE.getExtension().minecraft + "-" + PaperTree.INSTANCE.getExtension().mappings + ".json"));
     public static final File NATIVES_DIRECTORY_CACHE = new File(PaperConstants.CACHE_DIRECTORY, "natives");
 
     public static final Delayed<File> RESULT_JAR = new DelayedCache<>(() -> new File(PaperTree.INSTANCE.getProject().getRootDir(), "build" + File.separator + "libs" + File.separator + PaperTree.INSTANCE.getProject().getName().toLowerCase(Locale.ENGLISH) + "-" + PaperTree.INSTANCE.getProject().getVersion() + ".jar"));

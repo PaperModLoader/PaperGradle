@@ -22,14 +22,8 @@ public class MakePaperTask extends DefaultTask {
             File temp = new File(this.getProject().getRootDir(), "build" + File.separator + "libs" + File.separator + buildFileName + "-temp.jar");
             ZipFile buildZip = new ZipFile(PaperConstants.RESULT_JAR.get());
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(temp));
-            out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + ".mappings"));
+            out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + ".json"));
             FileUtils.copyFile(PaperConstants.MAPPINGS_FILE_CACHE.get(), out);
-            out.closeEntry();
-            out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + "-obf.index"));
-            FileUtils.copyFile(PaperConstants.OBF_INDEX_CACHE.get(), out);
-            out.closeEntry();
-            out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + "-deobf.index"));
-            FileUtils.copyFile(PaperConstants.DEOBF_INDEX_CACHE.get(), out);
             out.closeEntry();
             Enumeration<? extends ZipEntry> entries = buildZip.entries();
             while (entries.hasMoreElements()) {

@@ -35,14 +35,8 @@ public class MakeMinecraftTask extends DefaultTask {
                 out.closeEntry();
             }
         }
-        out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + ".mappings"));
+        out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + ".json"));
         FileUtils.copyFile(PaperConstants.MAPPINGS_FILE_CACHE.get(), out);
-        out.closeEntry();
-        out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + "-obf.index"));
-        FileUtils.copyFile(PaperConstants.OBF_INDEX_CACHE.get(), out);
-        out.closeEntry();
-        out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + "-deobf.index"));
-        FileUtils.copyFile(PaperConstants.DEOBF_INDEX_CACHE.get(), out);
         out.closeEntry();
         entries = merged.entries();
         while (entries.hasMoreElements()) {
