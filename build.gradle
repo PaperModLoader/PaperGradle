@@ -21,10 +21,6 @@ configurations {
 repositories {
     mavenCentral()
     maven {
-        name = "cuchaz"
-        url = "http://maven.cuchazinteractive.com"
-    }
-    maven {
         name = "ilexiconn"
         url = "http://maven.ilexiconn.net"
     }
@@ -36,10 +32,9 @@ dependencies {
     compile gradleApi()
     shade "com.google.code.gson:gson:2.7"
     shade "commons-io:commons-io:2.5"
-    shade "cuchaz:enigma-lib:0.11b"
     shade "org.ow2.asm:asm-debug-all:5.1"
     shade "org.apache.commons:commons-lang3:3.4"
-    shade "xyz.papermodloader:book:0.1.0.1"
+    shade "xyz.papermodloader:book:0.1.0.5"
 }
 
 sourceSets {
