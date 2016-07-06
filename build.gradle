@@ -34,7 +34,7 @@ dependencies {
     shade "commons-io:commons-io:2.5"
     shade "org.ow2.asm:asm-debug-all:5.1"
     shade "org.apache.commons:commons-lang3:3.4"
-    shade "xyz.papermodloader:book:0.1.0.8"
+    shade "xyz.papermodloader:book:0.1.0.9"
     shade "com.google.guava:guava:19.0"
 }
 
