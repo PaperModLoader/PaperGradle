@@ -1,15 +1,15 @@
 package xyz.papermodloader.tree.cardboard;
 
-import xyz.papermodloader.tree.Tree;
+import xyz.papermodloader.tree.TreePlugin;
 import xyz.papermodloader.tree.cardboard.task.ExportMappingsTask;
 import xyz.papermodloader.tree.cardboard.task.ImportMappingsTask;
 
-public class CardboardTree extends Tree<CardboardExtension> {
-    public static CardboardTree INSTANCE;
+public class CardboardPlugin extends TreePlugin<CardboardExtension> {
+    public static CardboardPlugin INSTANCE;
 
     @Override
     public String getPluginName() {
-        return "Cardboard Tree";
+        return "Cardboard";
     }
 
     @Override
@@ -19,7 +19,7 @@ public class CardboardTree extends Tree<CardboardExtension> {
 
     @Override
     protected void configure() {
-        CardboardTree.INSTANCE = this;
+        CardboardPlugin.INSTANCE = this;
     }
 
     @Override

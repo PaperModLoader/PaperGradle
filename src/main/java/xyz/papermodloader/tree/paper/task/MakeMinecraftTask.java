@@ -1,11 +1,10 @@
 package xyz.papermodloader.tree.paper.task;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
-import org.apache.commons.io.IOUtils;
 import xyz.papermodloader.tree.paper.PaperConstants;
-import xyz.papermodloader.tree.paper.PaperTree;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,13 +28,13 @@ public class MakeMinecraftTask extends DefaultTask {
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
             String name = entry.getName();
-            if (name.startsWith("assets") || name.endsWith(".png")|| name.endsWith(".xml")) {
+            if (name.startsWith("assets") || name.endsWith(".png") || name.endsWith(".xml")) {
                 out.putNextEntry(entry);
                 IOUtils.copy(client.getInputStream(entry), out);
                 out.closeEntry();
             }
         }
-        out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + ".json"));
+        out.putNextEntry(new ZipEntry("mappings.json"));
         FileUtils.copyFile(PaperConstants.MAPPINGS_FILE_CACHE.get(), out);
         out.closeEntry();
         entries = merged.entries();

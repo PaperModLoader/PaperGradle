@@ -1,38 +1,38 @@
-package xyz.papermodloader.tree.paper.task;
+package xyz.papermodloader.tree.task;
 
 import org.apache.commons.io.FileUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import xyz.papermodloader.tree.util.HashUtil;
+import xyz.papermodloader.tree.util.Initializer;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.function.Consumer;
 
 public class DownloadTask extends DefaultTask {
-    private Consumer<DownloadTask> init;
+    private Initializer initializer;
     private File cache;
     private File file;
-    private URL url;
+    private String url;
     private String sha1;
 
     @TaskAction
     public void doTask() throws IOException {
-        this.init.accept(this);
-        if (!cache.exists() || (this.sha1 != null && !HashUtil.equalHash(this.cache, this.sha1))) {
+        this.initializer.initialize();
+        if (!this.cache.exists() || (this.sha1 != null && !HashUtil.equalHash(this.cache, this.sha1))) {
             if (this.file != null && this.file.exists()) {
                 FileUtils.copyFile(this.file, this.cache);
                 this.getLogger().info(":found fallback for " + this.cache.getName());
             } else {
-                FileUtils.copyURLToFile(this.url, this.cache);
+                FileUtils.copyURLToFile(new URL(this.url), this.cache);
                 this.getLogger().info(":downloading " + this.cache.getName());
             }
         }
     }
 
-    public void setInit(Consumer<DownloadTask> init) {
-        this.init = init;
+    public void setInitializer(Initializer initializer) {
+        this.initializer = initializer;
     }
 
     public void setCache(File cache) {
@@ -43,7 +43,7 @@ public class DownloadTask extends DefaultTask {
         this.file = file;
     }
 
-    public void setURL(URL url) {
+    public void setURL(String url) {
         this.url = url;
     }
 

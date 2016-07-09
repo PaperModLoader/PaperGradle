@@ -5,7 +5,6 @@ import org.apache.commons.io.IOUtils;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import xyz.papermodloader.tree.paper.PaperConstants;
-import xyz.papermodloader.tree.paper.PaperTree;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,7 +21,7 @@ public class MakePaperTask extends DefaultTask {
             File temp = new File(this.getProject().getRootDir(), "build" + File.separator + "libs" + File.separator + buildFileName + "-temp.jar");
             ZipFile buildZip = new ZipFile(PaperConstants.RESULT_JAR.get());
             ZipOutputStream out = new ZipOutputStream(new FileOutputStream(temp));
-            out.putNextEntry(new ZipEntry(PaperTree.INSTANCE.getExtension().minecraft + ".json"));
+            out.putNextEntry(new ZipEntry("mappings.json"));
             FileUtils.copyFile(PaperConstants.MAPPINGS_FILE_CACHE.get(), out);
             out.closeEntry();
             Enumeration<? extends ZipEntry> entries = buildZip.entries();

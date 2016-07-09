@@ -1,19 +1,17 @@
-package xyz.papermodloader.tree.paper.task;
+package xyz.papermodloader.tree.task;
 
 import com.google.common.io.ByteStreams;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldNode;
 import org.objectweb.asm.tree.MethodNode;
-import xyz.papermodloader.paper.launcher.side.Side;
-import xyz.papermodloader.paper.launcher.side.SideDependent;
-import xyz.papermodloader.tree.paper.PaperConstants;
+import xyz.papermodloader.tree.util.Initializer;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -22,11 +20,17 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class MergeTask extends DefaultTask {
+    private Initializer initializer;
+    private File clientJar;
+    private File serverJar;
+    private File mergedJar;
+
     @TaskAction
     public void doTask() {
+        this.initializer.initialize();
         try {
-            ZipFile client = new ZipFile(PaperConstants.CLIENT_JAR_CACHE.get());
-            ZipFile server = new ZipFile(PaperConstants.SERVER_JAR_CACHE.get());
+            ZipFile client = new ZipFile(this.clientJar);
+            ZipFile server = new ZipFile(this.serverJar);
 
             List<ZipEntry> clientClasses = new LinkedList<>();
             List<ZipEntry> serverClasses = new LinkedList<>();
@@ -51,14 +55,14 @@ public class MergeTask extends DefaultTask {
                 if (serverClass != null) {
                     serverClasses.remove(serverClass);
                 }
-                classes.put(new ZipEntry(clientClass.getName()), this.processClass(client, clientClass, server, serverClass, Side.CLIENT));
+                classes.put(new ZipEntry(clientClass.getName()), this.processClass(client, clientClass, server, serverClass, "CLIENT"));
             }
 
             for (ZipEntry serverClass : serverClasses) {
-                classes.put(new ZipEntry(serverClass.getName()), this.processClass(server, serverClass, null, null, Side.SERVER));
+                classes.put(new ZipEntry(serverClass.getName()), this.processClass(server, serverClass, null, null, "SERVER"));
             }
 
-            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(PaperConstants.MERGED_JAR_CACHE.get()));
+            ZipOutputStream out = new ZipOutputStream(new FileOutputStream(this.mergedJar));
 
             for (Map.Entry<ZipEntry, byte[]> entry : classes.entrySet()) {
                 out.putNextEntry(entry.getKey());
@@ -74,7 +78,7 @@ public class MergeTask extends DefaultTask {
         }
     }
 
-    private byte[] processClass(ZipFile file, ZipEntry entry, ZipFile mergeFile, ZipEntry merge, Side side) throws IOException {
+    private byte[] processClass(ZipFile file, ZipEntry entry, ZipFile mergeFile, ZipEntry merge, String side) throws IOException {
         ClassNode processed = this.getClassNode(file, entry);
         AnnotationNode sideAnnotation = this.createSideAnnotation(side);
         if (merge != null) {
@@ -89,7 +93,7 @@ public class MergeTask extends DefaultTask {
                 if (field.visibleAnnotations == null) {
                     field.visibleAnnotations = new ArrayList<>();
                 }
-                field.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
+                field.visibleAnnotations.add(this.createSideAnnotation(side.equals("CLIENT") ? "SERVER" : "CLIENT"));
                 processed.fields.add(field);
             });
             processed.methods.stream().filter(method -> this.getEquivalent(method, mergeClassNode) == null).forEach(method -> {
@@ -102,7 +106,7 @@ public class MergeTask extends DefaultTask {
                 if (method.visibleAnnotations == null) {
                     method.visibleAnnotations = new ArrayList<>();
                 }
-                method.visibleAnnotations.add(this.createSideAnnotation(side.invert()));
+                method.visibleAnnotations.add(this.createSideAnnotation(side.equals("CLIENT") ? "SERVER" : "CLIENT"));
                 processed.methods.add(method);
             });
         } else {
@@ -134,11 +138,11 @@ public class MergeTask extends DefaultTask {
         return null;
     }
 
-    private AnnotationNode createSideAnnotation(Side side) {
-        AnnotationNode annotation = new AnnotationNode(Type.getDescriptor(SideDependent.class));
+    private AnnotationNode createSideAnnotation(String side) {
+        AnnotationNode annotation = new AnnotationNode("Lxyz/papermodloader/paper/launcher/side/SideDependent;");
         annotation.values = new ArrayList<>();
         annotation.values.add("value");
-        annotation.values.add(new String[]{Type.getDescriptor(Side.class), side.name()});
+        annotation.values.add(new String[]{"Lxyz/papermodloader/paper/launcher/side/Side;", side});
         return annotation;
     }
 
@@ -169,5 +173,21 @@ public class MergeTask extends DefaultTask {
                 }
             }
         }
+    }
+
+    public void setInitializer(Initializer initializer) {
+        this.initializer = initializer;
+    }
+
+    public void setClientJar(File clientJar) {
+        this.clientJar = clientJar;
+    }
+
+    public void setServerJar(File serverJar) {
+        this.serverJar = serverJar;
+    }
+
+    public void setMergedJar(File mergedJar) {
+        this.mergedJar = mergedJar;
     }
 }

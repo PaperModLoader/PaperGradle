@@ -7,8 +7,8 @@ import org.gradle.api.Project;
 import org.gradle.api.Task;
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository;
 
-public abstract class Tree<K> implements Plugin<Project> {
-    public static final String VERSION = "0.1.0";
+public abstract class TreePlugin<K> implements Plugin<Project> {
+    public static final String VERSION = "0.1.1";
 
     private Project project;
     private boolean headerDisplayed;
@@ -38,23 +38,23 @@ public abstract class Tree<K> implements Plugin<Project> {
     private void afterEvaluate() {
         if (!this.headerDisplayed) {
             this.project.getLogger().lifecycle("======================================");
-            this.project.getLogger().lifecycle(this.getPluginName() + " " + Tree.VERSION);
+            this.project.getLogger().lifecycle(this.getPluginName() + " " + TreePlugin.VERSION);
             this.project.getLogger().lifecycle("https://github.com/PaperModLoader/Tree");
             this.project.getLogger().lifecycle("======================================");
             this.headerDisplayed = true;
         }
     }
 
-    protected <T extends Task> T addTask(String name, Class<? extends T> task) {
-        T t = this.project.getTasks().create(name, task);
-        t.setGroup("Tree");
-        return t;
+    protected <T extends Task> T addTask(String name, Class<? extends T> type) {
+        T task = this.project.getTasks().create(name, type);
+        task.setGroup(this.getPluginName());
+        return task;
     }
 
-    protected  <T extends Task> T addTask(String name, Class<? extends T> task, Action<T> action) {
-        T t = this.project.getTasks().create(name, task, action);
-        t.setGroup("Tree");
-        return t;
+    protected <T extends Task> T addTask(String name, Class<? extends T> type, Action<T> action) {
+        T task = this.project.getTasks().create(name, type, action);
+        task.setGroup(this.getPluginName());
+        return task;
     }
 
     protected MavenArtifactRepository addMavenRepo(String name, String url) {

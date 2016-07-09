@@ -51,7 +51,7 @@ shadowJar {
 String getVersion() {
     String version = "0.0.0"
     String prefix = "public static final String VERSION = \"";
-    File file = file("src/main/java/xyz/papermodloader/tree/Tree.java")
+    File file = file("src/main/java/xyz/papermodloader/tree/TreePlugin.java")
     file.eachLine { String s ->
         s = s.trim();
         if (s.startsWith(prefix)) {

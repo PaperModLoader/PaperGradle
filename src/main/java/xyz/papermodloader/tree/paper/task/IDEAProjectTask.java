@@ -6,7 +6,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import xyz.papermodloader.tree.paper.PaperTree;
+import xyz.papermodloader.tree.paper.PaperPlugin;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.*;
@@ -49,7 +49,7 @@ public class IDEAProjectTask extends DefaultTask {
                 }
             }
 
-            String workingDirectory = PaperTree.INSTANCE.getExtension().workingDirectory;
+            String workingDirectory = PaperPlugin.INSTANCE.getExtension().workingDirectory;
             String ideaWorkingDirectory = "file://$PROJECT_DIR$/" + workingDirectory;
             runManager.appendChild(this.createRunConfiguration(document, runManager, "xyz.papermodloader.paper.launcher.PaperClient", projectName, "Minecraft Client", ideaWorkingDirectory));
             runManager.appendChild(this.createRunConfiguration(document, runManager, "xyz.papermodloader.paper.launcher.PaperServer", projectName, "Minecraft Server", ideaWorkingDirectory));
